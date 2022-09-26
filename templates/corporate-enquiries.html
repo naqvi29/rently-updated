@@ -1,0 +1,82 @@
+{% extends 'layout.html' %} 
+{% block title %}Corporate-Enquiries{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+{% block content %}     
+    <div class="container">
+        <div class="row">
+
+
+
+
+            <div class="col2 column2 last text-center m-auto">
+
+                <div class="sec2contactform">
+                    <h1 class="sec2frmtitle">CORPORATE ENQUIRIES</h1>
+                    <p>Please fill out the form below and our representatives will be in touch with you shortly
+
+                    </p>
+                    <form action="/corporate-enquiries" method="post">
+                        <div class="form-row">
+                            <div class="col">
+                                <input required type="text" id="Name" name="name" class="form-control" placeholder=" Name">
+                            </div>
+                            <div class="col ">
+                                <input required type="Email" name="email" id="Email" class="form-control" placeholder=" Email">
+                            </div>
+                        </div>
+                    <!-- </form>
+                    <form> -->
+                        <div class="form-row">
+                            <div class="col mt-1">
+                                <input required type="number" id="number" name="number"   class="form-control" placeholder="Phone">
+                            </div>
+                            <div class="col mt-1">
+                                <input required type="text" name="address" id="Address" class="form-control" placeholder="Address">
+                            </div>
+                        </div>
+                    <!-- </form>
+                    <form> -->
+                        <div class=" mt-1">
+                            <input type="text" id="Location" name="location" class="form-control"
+                                aria-describedby="emailHelp" placeholder="Enter Your Location">
+                        </div>
+
+                        <!-- <form> -->
+                            <div class="form-row">
+                                <div class="col mt-1 ">
+                                    <input required type="text" name="cars" id="Cars" class="form-control" placeholder="No of Cars ">
+                                </div>
+                                <div class="col mt-1">
+                                    <input required type="text" name="days" id="Days" class="form-control" placeholder="No of Days ">
+                                </div>
+                            </div>
+                        <!-- </form> -->
+                        <div class=" mt-1">
+                            <input required type="text" name="purpose" id="enquire" class="form-control" 
+                                aria-describedby="emailHelp" placeholder="purpos of enquire">
+                        </div>
+                        <textarea class="form-control mt-1" id="exampleFormControlTextarea1" placeholder="Details" name="details" rows="3"></textarea>
+                        <button type="submit" class="btn btn-book btn-dark m-3">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+{% if success %}
+<script>
+  Swal.fire(
+  'Success!',
+  'Your inquiry has been received',
+  'success'
+)
+</script>
+{% endif %}
+
+{% endblock %}

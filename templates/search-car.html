@@ -1,0 +1,721 @@
+{% extends 'layout.html' %} 
+{% block title %}Search Car{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<style type="text/css">
+  /* naqvi29 */
+.autocomplete-items {
+    /*position: absolute;*/
+    position: relative;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /* top: 100%;
+    left: 0;
+    right: 0; */
+    max-height: 50vh;
+    overflow-y: auto;
+    widows: 100%;
+  }
+  .autocomplete-items div {
+    /* padding: 10px; */
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9;
+  }
+  .autocomplete-active {
+    background-color: #e9e9e9 !important;
+    color: #000;
+  }
+  /* ..  */
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="input_multy">
+        <div class="form-group autocomplete">
+            {% if pickup_location %}
+            <input type="email" class="form-control" id="pickup_location" name="pickup_location" aria-describedby="emailHelp"
+                placeholder="Enter Pick-Up Location *" value="{{pickup_location}}">
+            {% else %}
+            <input type="email" class="form-control" id="pickup_location" name="pickup_location" aria-describedby="emailHelp"
+                placeholder="Enter Pick-Up Location *">
+            {%endif%}
+            
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group mt-1">
+            {% if date %}
+                    <input type="DATE" name="date" class="form-control" id="date" aria-describedby="emailHelp"
+                        placeholder="Enter email" value="{{date}}">
+            {% else %}
+                    <input type="DATE" name="date" class="form-control" id="date" aria-describedby="emailHelp"
+                        placeholder="Enter email">
+            {%endif%}
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group mt-1">
+            {% if time %}
+                    <input type="time" name="time" id="time" class="form-control" value="{{time}}">
+            {% else %}
+                    <input type="time" name="time" id="time" class="form-control">
+            {%endif%}
+
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+
+                <!-- <div  class="custom-control  custom-radio">
+                    <input type="radio" id="customRadio1"  name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio1">FULL DAY</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio2">SHORT RENTAL</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+                    <label class="custom-control-label" for="customRadio3">SELF DRIVE</label>
+                </div> -->
+                <div class="radio_tabs">
+                    <label class="radio_wrap" data-radio="radio_1">
+                        {% if day_type == "full_day" %}
+                        <input type="radio" name="sports" class="input" onclick="handle_full_click(this);"  checked value="full_day">
+                        {% else %}
+                        <input type="radio" name="sports" class="input" onclick="handle_full_click(this);" value="full_day">
+                        {% endif %}
+                        <span class="radio_mark" style="color: white;">
+                            FULL DAY
+                        </span>
+                    </label>
+                    <label class="radio_wrap" data-radio="radio_2">
+                        {% if day_type == "short_rental" %}
+                        <input type="radio" name="sports" class="input" checked onclick="handle_short_click(this);" value="short_rental">
+                        {% else %}
+                        <input type="radio" name="sports" class="input" onclick="handle_short_click(this);" value="short_rental">
+                        {% endif %}
+                        <span class="radio_mark" style="color: white;">
+                            SHORT RENTAL
+                        </span>
+                    </label>
+                    <label class="radio_wrap" data-radio="radio_3">
+                        {% if day_type == "self_drive" %}
+                        <input type="radio" name="sports" class="input" onclick="handle_self_click(this);" checked value="self_drive">
+                        {% else %}
+                        <input type="radio" name="sports" class="input" onclick="handle_self_click(this);" value="self_drive">
+                        {% endif %}
+                        <span class="radio_mark" style="color: white;">
+                            SELF DRIVE
+                        </span>
+                    </label>
+
+                </div>
+
+
+            </div>
+        </div>
+        <!-- <button class="btn btn-dark btn-book">Book Now</button> -->
+    </div>
+</div>
+
+
+</section>
+
+
+
+<section class="search-car-header">
+<div class="content radio_con">
+    {%if day_type=="self_drive"%}
+        {% for i in self_drive_cars %}
+        <div class="radio_content radio_1">
+            <div class="container ">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="car">
+                            <img src="/static/images/cars/{{i.pic}}" width="1024" height="645" class="img-fluid" alt="">
+                            <!-- <img src="/static/images/cars/1581613723188-civic.png" class="img-fluid" alt=""> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="car-details">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2 class="hg">{{i.name}}</h2>
+                                </div>
+                                <div id="hour-div-{{i._id}}" data-price-per-hour="{{i.price_per_hour}}" data-price-per-hour-old="{{i.price_per_hour_old}}" data-price-per-day="{{i.price_per_day}}" data-price-per-day-old="{{i.price_per_day_old}}" class="col-sm-6">
+                                    {% if day_type=="short_rental" %}
+                                    <span  class="cut pg" id="oldprice-{{i._id}}">{{i.price_per_hour_old}}</span>
+                                    <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_hour}}</span> PKR/Hour</h3>
+                                    {% else %}
+                                    <span  class="cut pg" id="oldprice-{{i._id}}">{{i.price_per_day_old}} </span>
+                                    <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_day}}</span> PKR/day</h3>
+                                    <span hidden  id="oldpricehide-{{i._id}}">{{i.price_per_day_old}} </span>
+                                    <span hidden id="pricehide-{{i._id}}">{{i.price_per_day}}</span>
+
+                                    {% endif %}
+                                    {% if i.out_city_cost %}
+                                    <span hidden class="pg" id="out-city-cost-{{i._id}}">{{i.out_city_cost}}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="#" class="smt">
+                                        See all details
+                                    </a>
+                                </div>
+
+                                {% if day_type=="self_drive" %}
+                                <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> Self Drive</span>
+                                {% else %}
+                                <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> {% if i.with_driver==true%}With Driver{%else%}Without Driver{%endif%}</span>
+                                {% endif %}
+                                <span class="smt"> <i class="fa fa-droplet "></i> {% if i.ac==true%}With Air Cond.{%else%}Without Air Cond.{%endif%}
+                                </span>
+                                <span class="smt"> <i class="fa fa-person"></i> 4 Doors
+                                </span>
+                                <span class="smt"> <i class="fa fa-gear"></i> {{ i.transmission | capitalize }}</span>
+                                <br>
+                                <br>
+                                <span class="smt"> <i class="fa fa-clock"></i> Overtime: PKR {{i.overtime}}/-
+                                </span>
+                                <span class="smt"> <i class="fa fa-gas-pump"></i> Fuel Average ({{i.fuel_average}} KM/LTR)
+                                </span>
+                                <!-- <span> <i class="fa fa-gas-pump"></i> Fuel (PKR {{i.fuel_average}}/KM)
+                                </span> -->
+                                <span class="smt"> <i class="fa fa-hourglass"></i> Full Day ({{i.full_day}}hrs) </span>
+                                <br>
+                                {% if i.city == "out" %}
+                                <div class="col-sm-6 smt">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
+
+                                        
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
+                                    </div>
+                                </div>
+                                {% elif i.city == "in" %}
+                                <div class="col-sm-6 smt">
+                                    <h6>In City Only</h6>
+                                </div>
+                                {% endif %}
+
+                                <div id="days-div-{{i._id}}">
+                                    {% if day_type=="self_drive" %}
+                                        <div class="col-sm-12 ">
+                                            <div class="custom-control custom-radio ">
+                                                <input type="radio" id="{{i._id}}-days1" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="14" onchange="change_days('{{i._id}}');">
+                                                <label class="custom-control-label smt" for="{{i._id}}-days1">14 days</label>
+
+                                                
+                                            </div>
+                                            <div class="custom-control custom-radio ">
+                                                <input type="radio" id="{{i._id}}-days2" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="24" onchange="change_days('{{i._id}}');">
+                                                <label class="custom-control-label smt" for="{{i._id}}-days2">24 days</label>
+                                            </div>
+                                            <div class="custom-control custom-radio ">
+                                                <input type="radio" id="{{i._id}}-days3" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="30" onchange="change_days('{{i._id}}');">
+                                                <label class="custom-control-label smt" for="{{i._id}}-days3">30 days</label>
+                                            </div>
+                                        </div>   
+                                    {% endif %}  
+                                </div>
+                                <br>
+                                <button onclick="booknow('{{i._id}}')" class="btn btn-dark btn-book">Book Now</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        {% if cars %}
+        {% for i in cars %}
+        <div class="radio_content radio_1">
+            <div class="container ">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="car">
+                            <img src="/static/images/cars/{{i.pic}}" width="1024" height="645" class="img-fluid" alt="">
+                            <!-- <img src="/static/images/cars/1581613723188-civic.png" class="img-fluid" alt=""> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="car-details">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2 class="hg">{{i.name}}</h2>
+                                </div>
+                                <div id="days-div-{{i._id}}">
+                                    {% if day_type=="self_drive" %}
+                                        <div class="col-sm-12">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="{{i._id}}-days1" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="14">
+                                                <label class="custom-control-label" for="{{i._id}}-days1">14 days</label>
+
+                                                
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="{{i._id}}-days2" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="24">
+                                                <label class="custom-control-label" for="{{i._id}}-days2">24 days</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="{{i._id}}-days3" name="{{i._id}}-days"
+                                                    class="custom-control-input" value="30">
+                                                <label class="custom-control-label" for="{{i._id}}-days3">30 days</label>
+                                            </div>
+                                        </div>   
+                                    {% endif %}  
+                                </div>
+                                <div id="hour-div-{{i._id}}" data-price-per-hour="{{i.price_per_hour}}" data-price-per-hour-old="{{i.price_per_hour_old}}" data-price-per-day="{{i.price_per_day}}" data-price-per-day-old="{{i.price_per_day_old}}" class="col-sm-6">
+                                    {% if day_type=="short_rental" %}
+                                    <span id="oldprice-{{i._id}}" class="cut pg">{{i.price_per_hour_old}} </span>
+                                    <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_hour}}</span> PKR/Hour</h3>
+                                    {% else %}
+                                    <span id="oldprice-{{i._id}}" class="cut pg">{{i.price_per_day_old}} </span>
+                                    <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_day}}</span> PKR/day</h3>
+
+                                    {% endif %}
+                                    {% if i.out_city_cost %}
+                                    <span hidden class="pg" id="out-city-cost-{{i._id}}">{{i.out_city_cost}}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="#" class="smt">
+                                        See all details
+                                    </a>
+                                </div>
+
+                                {% if day_type=="self_drive" %}
+                                <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> Self Drive</span>
+                                {% else %}
+                                <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> {% if i.with_driver==true%}With Driver{%else%}Without Driver{%endif%}</span>
+                                {% endif %}
+                                <span class="smt"> <i class="fa fa-droplet "></i> {% if i.ac==true%}With Air Cond.{%else%}Without Air Cond.{%endif%}
+                                </span>
+                                <span class="smt"> <i class="fa fa-person"></i> 4 Doors
+                                </span>
+                                <span class="smt"> <i class="fa fa-gear"></i> {{ i.transmission | capitalize }}</span>
+                                <br>
+                                <br>
+                                <span class="smt"> <i class="fa fa-clock"></i> Overtime: PKR {{i.overtime}}/-
+                                </span>
+                                <span class="smt"> <i class="fa fa-gas-pump"></i> Fuel Average ({{i.fuel_average}} KM/LTR)
+                                </span>
+                                <!-- <span> <i class="fa fa-gas-pump"></i> Fuel (PKR {{i.fuel_average}}/KM)
+                                </span> -->
+                                <span class="smt"> <i class="fa fa-hourglass"></i> Full Day ({{i.full_day}}hrs) </span>
+                                <br>
+                                {% if i.city == "out" %}
+                                <div class="col-sm-6 smt">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
+
+                                        
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');" >
+                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
+                                    </div>
+                                </div>
+                                {% elif i.city == "in" %}
+                                <div class="col-sm-6 smt">
+                                    <h6>In City Only</h6>
+                                </div>
+                                {% endif %}
+                                <br>
+                                <button onclick="booknow('{{i._id}}')" class="btn btn-dark btn-book">Book Now</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h3 class="text-center">No cars Yet</h3>
+        {% endif %}
+    {% endif %}
+</div>
+</section>
+
+<script>
+    function booknow(id){
+        var logcheck = '{{loggedin}}';
+        if(logcheck=="False"){
+            logcheck=false;
+        }
+        else{
+            logcheck=true;
+        }
+        console.log(logcheck);
+        if(logcheck){
+
+            // check karo ke city out tu nahi
+            // if(document.querySelector('input[name='+ CSS.escape(id) + '-radio]')){       
+            // inout = document.querySelector('input[name='+ CSS.escape(id) + '-radio]:checked').value;
+            //     console.log(inout);
+            // }
+
+            console.log("logged");
+            // if (!{{loggedin}}){
+            //     console.log("Login First");
+            // }
+            console.log("clicked");
+            console.log(id); 
+            if ($('input[type=sports]:checked').size() > 0){
+                radio = document.querySelector('input[name="sports"]:checked').value;
+                console.log(radio);
+                // window.location.href = "/book-now/"+id+"/"+radio;
+                pickup_location = document.getElementById("pickup_location").value;
+                date = document.getElementById("date").value;
+                time = document.getElementById("time").value;
+                console.log(pickup_location);
+                console.log(date);
+                console.log(time);
+                if (!pickup_location && !date && !time){
+                    window.location.href = "/book-now/"+id+"/"+radio; 
+                }
+
+                else{
+                        window.location.href = "/book-now/"+id+"/"+radio+"?pickup_location="+pickup_location+"&date="+date+"&time="+time;
+                }
+
+            }else{
+               Swal.fire(
+                'Oops!',
+                'Please Select Booking Type First!',
+                'error'
+                ) 
+
+            }
+        }else{
+            Swal.fire(
+            'Oops!',
+            'Please Login First!',
+            'error'
+            )
+        }
+
+        
+
+    }
+</script>
+<!-- for auto complete  -->
+<script type="text/javascript">
+   var arr = ["Askari 1", "Askari 2", "Askari 3", "Askari 4", "Askari 5", "Bahria Town - Precinct 1", "Bahria Town - Precinct 10", "Bahria Town - Precinct 11", "Bahria Town - Precinct 12", "Bahria Town - Precinct 13", "Bahria Town - Precinct 14", "Bahria Town - Precinct 15", "Bahria Town - Precinct 16", "Bahria Town - Precinct 17", "Bahria Town - Precinct 18", "Bahria Town - Precinct 19", "Bahria Town - Precinct 2", "Bahria Town - Precinct 20", "Bahria Town - Precinct 21", "Bahria Town - Precinct 22", "Bahria Town - Precinct 23", "Bahria Town - Precinct 24", "Bahria Town - Precinct 25", "Bahria Town - Precinct 26", "Bahria Town - Precinct 27", "Bahria Town - Precinct 28", "Bahria Town - Precinct 29", "Bahria Town - Precinct 3", "Bahria Town - Precinct 30", "Bahria Town - Precinct 31", "Bahria Town - Precinct 32", "Bahria Town - Precinct 33", "Bahria Town - Precinct 4", "Bahria Town - Precinct 5", "Bahria Town - Precinct 6", "Bahria Town - Precinct 7", "Bahria Town - Precinct 8", "Bahria Town - Precinct 9", "BufferZone - Sector 15 A 1", "BufferZone - Sector 15 A 2", "BufferZone - Sector 15 A 3", "BufferZone - Sector 15 A 4", "BufferZone - Sector 15 A 5", "BufferZone - Sector 15 B", "BufferZone - Sector 16 A", "BufferZone - Sector 16 B", "Cantonment", "Clifton - Block 1", "Clifton - Block 2", "Clifton - Block 3", "Clifton - Block 4", "Clifton - Block 5", "Clifton - Block 6", "Clifton - Block 7", "Clifton - Block 8", "Clifton - Block 9", "Clifton - Kehkashan", "DHA - Phase 1", "DHA - Phase 2", "DHA - Phase 3", "DHA - Phase 4", "DHA - Phase 5", "DHA - Phase 6", "DHA - Phase 7", "DHA - Phase 8", "DHA - Phase 9", "F.B Area - Azizabad", "F.B Area - B1 Area", "F.B Area - B Area", "F.B Area - Block 1", "F.B Area - Block 10", "F.B Area - Block 11", "F.B Area - Block 12", "F.B Area - Block 13", "F.B Area - Block 14", "F.B Area - Block 15", "F.B Area - Block 16", "F.B Area - Block 17", "F.B Area - Block 18", "F.B Area - Block 19", "F.B Area - Block 2", "F.B Area - Block 20", "F.B Area - Block 21", "F.B Area - Block 22", "F.B Area - Block 3", "F.B Area - Block 4", "F.B Area - Block 5", "F.B Area - Block 6", "F.C Area - C1 Area", "F.C Area - C Area", "Garden - Garden East", "Garden - Garden West", "Garden - Soldier Bazaar", "Gulistan-e-Johar - Block 1", "Gulistan-e-Johar - Block 10", "Gulistan-e-Johar - Block 11", "Gulistan-e-Johar - Block 12", "Gulistan-e-Johar - Block 13", "Gulistan-e-Johar - Block 14", "Gulistan-e-Johar - Block 15", "Gulistan-e-Johar - Block 16", "Gulistan-e-Johar - Block 17", "Gulistan-e-Johar - Block 18", "Gulistan-e-Johar - Block 19", "Gulistan-e-Johar - Block 2", "Gulistan-e-Johar - Block 20", "Gulistan-e-Johar - Block 3", "Gulistan-e-Johar - Block 4", "Gulistan-e-Johar - Block 5", "Gulistan-e-Johar - Block 6", "Gulistan-e-Johar - Block 7", "Gulistan-e-Johar - Block 8", "Gulistan-e-Johar - Block 9", "Gulshan-e-Hadeed - Data Nagar", "Gulshan-e-Hadeed - EIDU Goth", "Gulshan-e-Hadeed - Gulshan-e-Mauzzam", "Gulshan-e-Hadeed - Gulshan-e-Rehman", "Gulshan-e-Hadeed - Mehran Road", "Gulshan-e-Hadeed - Phase 1", "Gulshan-e-Hadeed - Phase 2", "Gulshan-e-Hadeed - Phase 3", "Gulshan-e-Hadeed - PTCL Satellite Station", "Gulshan-e-Hadeed - Shah Latif Town", "Gulshan-e-Hadeed - Shahnawaz Goth", "Gulshan-e-Hadeed - Shah Town", "Gulshan-e-Hadeed - Steel Town", "Gulshan-e-Hadeed - TCP Godowns", "Gulshan-e-Iqbal - Adamjee Nagar", "Gulshan-e-Iqbal - Block 1", "Gulshan-e-Iqbal - Block 10", "Gulshan-e-Iqbal - Block 11", "Gulshan-e-Iqbal - Block 12", "Gulshan-e-Iqbal - Block 13", "Gulshan-e-Iqbal - Block 14", "Gulshan-e-Iqbal - Block 15", "Gulshan-e-Iqbal - Block 16", "Gulshan-e-Iqbal - Block 17", "Gulshan-e-Iqbal - Block 18", "Gulshan-e-Iqbal - Block 19", "Gulshan-e-Iqbal - Block 2", "Gulshan-e-Iqbal - Block 3", "Gulshan-e-Iqbal - Block 4", "Gulshan-e-Iqbal - Block 5", "Gulshan-e-Iqbal - Block 6", "Gulshan-e-Iqbal - Block 7", "Gulshan-e-Iqbal - Block 8", "Gulshan-e-Iqbal - Block 9", "Gulshan-e-Iqbal - Civic Center", "Gulshan-e-Iqbal - Dhoraji", "Korangi - Abdullah Shah Noorani Pahari Colony", "Korangi - Korangi Industrial Area", "Korangi - Nasir Colony", "Korangi - PAF Base Korangi Creek", "Korangi - Zaman Town", "Korangi - Zia Colony", "Landhi - Alflah Housing Society", "Landhi - Awami Colony", "Landhi - Bagh-e-Korangi", "Landhi - Bakhtawar Goth", "Landhi - Barmi Colony", "Landhi - Bhutto Nagar", "Landhi - Future Colony", "Landhi - Gulshan-e-Rafi", "Landhi - Ilyas Goth", "Landhi - Labour Colony", "Landhi - Landhi Industrial Area", "Landhi - Muslimabad Colony", "Landhi - Muzaffarabad Colony", "Landhi - Punjab Town", "Landhi - Qasim Town", "Landhi - Sadat Colony", "Landhi - Shah Khalid Colony", "Landhi - Sharafi Goth", "Landhi - Zamanabad", "Liaquatabad - Block 1", "Liaquatabad - Block 10", "Liaquatabad - Block 2", "Liaquatabad - Block 3", "Liaquatabad - Block 4", "Liaquatabad - Block 5", "Liaquatabad - Block 6", "Liaquatabad - Block 7", "Liaquatabad - Block 8", "Liaquatabad - Block 9", "Malir - Malir", "Malir - Malir Cantt", "Nazimabad - Block 1", "Nazimabad - Block 2", "Nazimabad - Block 3", "Nazimabad - Block 4", "Nazimabad - Block 5", "North Karachi  - Sector 10", "North Karachi  - Sector 11 - A", "North Karachi  - Sector 11 - B", "North Karachi  - Sector 11 - C 1", "North Karachi  - Sector 11 - C 2", "North Karachi  - Sector 11 - C 3", "North Karachi  - Sector 11 - E", "North Karachi  - Sector 11 - H", "North Karachi  - Sector 11 - I", "North Karachi  - Sector 11 - K", "North Karachi  - Sector 11 - L", "North Karachi  - Sector 2", "North Karachi  - Sector 3", "North Karachi  - Sector 4", "North Karachi  - Sector 5 - A 1", "North Karachi  - Sector 5 - A 2", "North Karachi  - Sector 5 - A 3", "North Karachi  - Sector 5 - A 4", "North Karachi  - Sector 5 - B 1", "North Karachi  - Sector 5 - B 2", "North Karachi  - Sector 5 - B 3", "North Karachi  - Sector 5 - B 4", "North Karachi  - Sector 5 - C 1", "North Karachi  - Sector 5 - C 2", "North Karachi  - Sector 5 - C 3", "North Karachi  - Sector 5 - C 4", "North Karachi  - Sector 5 - I", "North Karachi  - Sector 5 - J", "North Karachi  - Sector 5 - K", "North Karachi  - Sector 5 - L", "North Karachi  - Sector 5 - M", "North Karachi  - Sector 6", "North Karachi  - Sector 7 - D 1", "North Karachi  - Sector 7 - D 2", "North Karachi  - Sector 7 - D 3", "North Karachi  - Sector 7 - D 4", "North Karachi  - Sector 8", "North Karachi  - Sector 9", "North Nazimabad - Block A", "North Nazimabad - Block B", "North Nazimabad - Block C", "North Nazimabad - Block D", "North Nazimabad - Block E", "North Nazimabad - Block F", "North Nazimabad - Block G", "North Nazimabad - Block H", "North Nazimabad - Block I", "North Nazimabad - Block J", "North Nazimabad - Block K", "North Nazimabad - Block L", "North Nazimabad - Block M", "North Nazimabad - Block N", "North Nazimabad - Block O", "North Nazimabad - Block P", "North Nazimabad - Block Q", "North Nazimabad - Block R", "North Nazimabad - Block S", "North Nazimabad - Block T", "Old Town - Bhimpora", "Old Town - Bohra Pir", "Old Town - Bombay Bazar", "Old Town - Jodia Bazar", "Old Town - Kagzi Bazar", "Old Town - Kakri Ground", "Old Town - Kamil Gali", "Old Town - Khada Market", "Old Town - Kharadar", "Old Town - Lee Market", "Old Town - Mithadar", "Old Town - Nanwara", "Old Town - Nishter Road", "Old Town - Pan Mandi", "Old Town - Ramswami", "Old Town - Ranchorline", "Orangi Town - Banaras Town", "Orangi Town - Bangla Bazaar", "Orangi Town - Bilal Colony", "Orangi Town - Katti Pahari", "Orangi Town - Moria Goth Orangi", "Orangi Town - Orangi", "Orangi Town - Sector 14 - A", "Orangi Town - Sector 14 - C", "Orangi Town - Thorani Goth", "Baldiya Town", "Baloch Colony", "Civil Line", "FC Area", "Firdous Colony", "Gulshan-e-Maymar", "Hawksbay", "I.I Chundrigar", "Jamshed Road", "K.D.A Officers", "Kemari", "Liyari", "M.A Jinnah Rd", "Manora", "New Karachi", "New Surjani", "PIB Colony", "Pipri Goth", "Rizvia Society", "Saddar", "Scheme 33", "Shabbirabad", "P.E.C.H.S - Block 1", "P.E.C.H.S - Block 2", "P.E.C.H.S - Block 3", "P.E.C.H.S - Block 4", "P.E.C.H.S - Block 5", "P.E.C.H.S - Block 6", "P.E.C.H.S - Khalid Bin Walid", "P.E.C.H.S - Tariq Road", "S.I.T.E - Golimar", "S.I.T.E - S.I.T.E", "Shah Faisal Colony - Aswan Town", "Shah Faisal Colony - Gulshan-e-Asghar", "Shah Faisal Colony - Shah Faisal Colony 1", "Shah Faisal Colony - Shah Faisal Colony 5", "F.B Area \u2013 Block 7", "F.B Area - Block 9", "P.E.C.H.S - Block 7", "Aram Bagh", "Bath Island", "University Road", "Bahadurabad", "Shah Faisal Colony - 4", "Banglore Town", "Fowler Lines", "Shah Faisal Colony - Shamsi Society", "Gulshan-e-Jamal", "Shah Faisal Colony - 3", "Shah Faisal Colony - Green Town", "Darwaish Colony", "Korangi - Sector 31 B", "Firdous Colony", "North Nazimabad - Block W", "K.A.E.C.H.S", "Mehmoodabad", "Korangi - Mehran Town", "Landhi Town - 36 B", "Karachi Memon Society", "Madras Cooperative Housing Society", "Shahrah-e-Faisal", "Korangi - Sector 41 B", "Clifton - Delhi Colony", "Korangi - Sector 32 B", "Dhoraji - Adamjee Nagar", "Bhimpura", "Dhoraji - CP & Berar Society", "Shahra-e-Faisal - Umar Colony", "Model Colony", "Gulshan-e-Shamim", "Clifton - Shah Rasool Colony", "North Karachi  - Sector 12 C", "Jail Road - Hyderabad Colony", "Napier Quarter", "Gulzar-e-Hijri", "North Karachi  - Sector 12 A", "Shahra-e-Faisal - Jinnah Housing Society", "K.D.A Scheme 1", "Clifton - Punjab Colony", "Korangi - Sector 31 D", "Clifton - Zamzama", "Parsi Colony", "Qayyumabad", "Khokrapar", "Shah Faisal Colony - Muslimabad Malir City", "F.B Area - Block 8", "Nanak Wara", "Mohammad Ali Society", "Manzoor Colony", "Dalmia", "Defence View - Phase 1", "Defence View - Phase 2", "KDA Officers Housing Society", "Karimabad", "Soldier Bazar", "Hussainabad", "Sharfabad Society", "Gharibabad", "Sindhi Muslim Cooperative Housing Society"]
+  let autoInput = document.getElementById("pickup_location");
+  let currentFocus;
+  autoInput.addEventListener("input", function (e) {
+    let a,
+      b,
+      i,
+      val = this.value;
+    console.log({ a, b, i, val });
+    close();
+    if (!val) {
+      return false;
+    }
+    currentFocus = -1;
+    a = document.createElement("div");
+    a.setAttribute("id", this.id + "autocomplete-list");
+    a.setAttribute("class", "autocomplete-items");
+    this.parentNode.appendChild(a);
+    
+    let matchingWordList = arr.filter((item) =>
+      item.toUpperCase().includes(val.toUpperCase())
+    );
+
+    matchingWordList.forEach((item) => {
+      b = document.createElement("div");
+      b.innerHTML = item.substr(0, val.length);
+      b.innerHTML += item.substr(val.length);
+      b.innerHTML += "<input type='hidden' value='" + item + "'>";
+      b.addEventListener("click", function (e) {
+        autoInput.value = this.getElementsByTagName("input")[0].value;
+        close();
+      });
+      a.appendChild(b);
+    });
+  });
+  let temp = "";
+  autoInput.addEventListener("keypress", function (e) {
+    if (
+      arr.filter((item) =>
+        item.toUpperCase().includes((autoInput.value + e.key).toUpperCase())
+      ).length <= 0
+    ) {
+      autoInput.value = temp;
+      return;
+    } else {
+      temp = autoInput.value;
+    }
+  });
+  autoInput.addEventListener("keydown", function (e) {
+    var x = document.getElementById(this.id + "autocomplete-list");
+    if (x) x = x.getElementsByTagName("div");
+    if (e.keyCode == 40) {
+      currentFocus++;
+      console.log(x);
+      active(x);
+    } else if (e.keyCode == 38) {
+      currentFocus--;
+      console.log(x);
+      active(x);
+    } else if (e.keyCode == 13) {
+      e.preventDefault();
+      console.log(x);
+      if (currentFocus > -1) {
+        if (x) x[currentFocus].click();
+      }
+    }
+  });
+  function active(x) {
+    if (!x) return false;
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = x.length - 1;
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function close(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != autoInput) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+    
+
+    
+  };
+</script>
+<script>
+    // function handle_self_click_old(){
+    //     car_ids = {{car_ids|safe}}
+    //     for (let i = 0; i < car_ids.length; i++) {
+    //         self_span = document.getElementById("sx-"+car_ids[i]);
+    //         self_span.innerHTML = ``;
+    //         self_span.innerHTML = `<i class="fa fa-user"></i> Self Drive`;
+    //         days_div = document.getElementById("days-div-"+car_ids[i]);
+    //         days_div.innerHTML = ``;
+    //         days_div.innerHTML = `<div class="col-sm-12">
+    //                                     <div class="custom-control custom-radio">
+    //                                         <input type="radio" id="`+car_ids[i]+`-days1" name="`+car_ids[i]+`-days"
+    //                                             class="custom-control-input" value="14">
+    //                                         <label class="custom-control-label" for="`+car_ids[i]+`-days1">14 days</label>
+
+                                            
+    //                                     </div>
+    //                                     <div class="custom-control custom-radio">
+    //                                         <input type="radio" id="`+car_ids[i]+`-days2" name="`+car_ids[i]+`-days"
+    //                                             class="custom-control-input" value="24">
+    //                                         <label class="custom-control-label" for="`+car_ids[i]+`-days2">24 days</label>
+    //                                     </div>
+    //                                     <div class="custom-control custom-radio">
+    //                                         <input type="radio" id="`+car_ids[i]+`-days3" name="`+car_ids[i]+`-days"
+    //                                             class="custom-control-input" value="30">
+    //                                         <label class="custom-control-label" for="`+car_ids[i]+`-days3">30 days</label>
+    //                                     </div>
+    //                                 </div> `;
+    //         hour_div = document.getElementById("hour-div-"+car_ids[i]);
+    //         data_pph = hour_div.getAttribute('data-price-per-day');
+    //         data_ppho = hour_div.getAttribute('data-price-per-day-old');
+    //         console.log(data_pph);
+    //         console.log(data_ppho);
+    //         hour_div.innerHTML = ``;
+
+    //         hour_div.innerHTML = `
+    //                             <span class="cut">`+data_ppho+` </span>
+    //                             <h3 class="">`+data_pph+` PKR/day</h3>`;
+    //         console.log("done");
+
+
+
+    //     }
+
+    // }
+
+    function handle_self_click(){
+        pickup_location = document.getElementById("pickup_location").value;
+        date = document.getElementById("date").value;
+        time = document.getElementById("time").value;
+        category = '{{category}}';
+        if (category){
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=self_drive&category="+category);
+        }else{
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=self_drive");
+        }
+
+
+
+    }
+
+    // function handle_short_click_old(){
+
+    //     car_ids = {{car_ids|safe}}
+    //     for (let i = 0; i < car_ids.length; i++) {
+    //         hour_div = document.getElementById("hour-div-"+car_ids[i]);
+    //         data_pph = hour_div.getAttribute('data-price-per-hour');
+    //         data_ppho = hour_div.getAttribute('data-price-per-hour-old');
+    //         console.log(data_pph);
+    //         console.log(data_ppho);
+    //         hour_div.innerHTML = ``;
+    //         hour_div.innerHTML = `
+    //                             <span class="cut">`+data_ppho+` </span>
+    //                             <h3 class="">`+data_pph+` PKR/Hour</h3>`;
+    //         console.log("done");
+    //         days_div = document.getElementById("days-div-"+car_ids[i]);
+    //         days_div.innerHTML = ``;
+    //     }
+    // }
+
+    function handle_short_click(){
+
+        pickup_location = document.getElementById("pickup_location").value;
+        date = document.getElementById("date").value;
+        time = document.getElementById("time").value;
+        category = '{{category}}';
+        if (category){
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=short_rental&category="+category);
+        }else{
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=short_rental");
+        }
+    }
+
+    // function handle_full_click_old(){
+
+
+    //     car_ids = {{car_ids|safe}}
+    //     for (let i = 0; i < car_ids.length; i++) {
+    //         hour_div = document.getElementById("hour-div-"+car_ids[i]);
+    //         data_pph = hour_div.getAttribute('data-price-per-day');
+    //         data_ppho = hour_div.getAttribute('data-price-per-day-old');
+    //         console.log(data_pph);
+    //         console.log(data_ppho);
+    //         hour_div.innerHTML = ``;
+    //         hour_div.innerHTML = `
+    //                             <span class="cut">`+data_ppho+` </span>
+    //                             <h3 class="">`+data_pph+` PKR/day</h3>`;
+    //         console.log("done");
+            
+    //         days_div = document.getElementById("days-div-"+car_ids[i]);
+    //         days_div.innerHTML = ``;
+
+    //     }
+    // }
+
+    function handle_full_click(){
+
+        pickup_location = document.getElementById("pickup_location").value;
+        date = document.getElementById("date").value;
+        time = document.getElementById("time").value;
+        category = '{{category}}';
+        if (category){
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=full_day&category="+category);
+        }else{
+        location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=full_day");
+        }
+
+    }
+
+    function change_city(vehicle_id){
+        console.log(vehicle_id);
+
+        city_radio = document.querySelector('input[name="'+vehicle_id+'-radio"]:checked').value;
+        console.log(city_radio);
+        out_city_cost = document.getElementById("out-city-cost-"+vehicle_id);
+        out_city_cost = parseFloat(out_city_cost.innerHTML)
+        if(city_radio=="out"){
+            dv_old_div = document.getElementById("oldprice-"+vehicle_id)
+            dv_new_div = document.getElementById("price-"+vehicle_id)
+            dv_old = parseFloat(dv_old_div.innerHTML);
+            dv_new = parseFloat(dv_new_div.innerHTML);
+            dv_old = dv_old+out_city_cost;
+            dv_new = dv_new+out_city_cost;
+            dv_old_div.innerHTML = dv_old;
+            dv_new_div.innerHTML = dv_new;
+        }else{
+            dv_old_div = document.getElementById("oldprice-"+vehicle_id)
+            dv_new_div = document.getElementById("price-"+vehicle_id)
+            dv_old = parseFloat(dv_old_div.innerHTML);
+            dv_new = parseFloat(dv_new_div.innerHTML);
+            dv_old = dv_old-out_city_cost;
+            dv_new = dv_new-out_city_cost;
+            dv_old_div.innerHTML = dv_old;
+            dv_new_div.innerHTML = dv_new;
+        }  
+    }
+
+    function change_days(vehicle_id){
+        console.log(vehicle_id);
+
+        days_radio = document.querySelector('input[name="'+vehicle_id+'-days"]:checked').value;
+        console.log(days_radio);
+        if(days_radio=="14"){
+            dv_old_div = document.getElementById("oldpricehide-"+vehicle_id)
+            dv_new_div = document.getElementById("pricehide-"+vehicle_id)
+            dv_old = parseFloat(dv_old_div.innerHTML);
+            dv_new = parseFloat(dv_new_div.innerHTML);
+            dv_old = dv_old*14;
+            dv_new = dv_new*14;
+            document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
+            document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
+        }else if(days_radio=="24"){
+            dv_old_div = document.getElementById("oldpricehide-"+vehicle_id)
+            dv_new_div = document.getElementById("pricehide-"+vehicle_id)
+            dv_old = parseFloat(dv_old_div.innerHTML);
+            dv_new = parseFloat(dv_new_div.innerHTML);
+            dv_old = dv_old*24;
+            dv_new = dv_new*24;
+            document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
+            document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
+        } else if(days_radio=="30"){
+            dv_old_div = document.getElementById("oldpricehide-"+vehicle_id)
+            dv_new_div = document.getElementById("pricehide-"+vehicle_id)
+            dv_old = parseFloat(dv_old_div.innerHTML);
+            dv_new = parseFloat(dv_new_div.innerHTML);
+            dv_old = dv_old*30;
+            dv_new = dv_new*30;
+            document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
+            document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
+
+        }
+    }
+</script>
+
+        
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'layout.html' %} 
+{% block title %}My Bookings{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+
+        /* by default hide all radio_content div elements except first element */
+        $(".content .radio_content").hide();
+        $(".content .radio_content:first-child").show();
+
+        /* when any radio element is clicked, Get the attribute value of that clicked radio element and show the radio_content div element which matches the attribute value and hide the remaining tab content div elements */
+        $(".radio_wrap").click(function () {
+            var current_raido = $(this).attr("data-radio");
+            $(".content .radio_content").hide();
+            $("." + current_raido).show();
+        })
+
+    });
+</script>
+{% endblock %}
+
+        {% block content %}
+        <div class="wrapper">
+            <div class="radio_tabs">
+                <label class="radio_wrap" data-radio="radio_1">
+                    <input type="radio" name="sports" class="input" checked>
+                    <span class="radio_mark">
+                        Active 
+                    </span>
+                </label>
+                <label class="radio_wrap" data-radio="radio_2">
+                    <input type="radio" name="sports" class="input">
+                    <span class="radio_mark">
+                        Scheduled
+                    </span>
+                </label>
+                <label class="radio_wrap" data-radio="radio_3">
+                    <input type="radio" name="sports" class="input">
+                    <span class="radio_mark">
+                        History
+                    </span>
+                </label>
+               
+            </div>
+
+            <div class="content">
+                <div class="radio_content radio_1">
+                 <div class="active">
+                    <!-- <h2>No Active Ride</h2> -->
+                    <table id="myTable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Pickup Date</th>
+                                <th>Pickup Time</th>
+                                <th>Pickup Location</th>
+                                <th>Dropoff Location</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in active_bookings %}
+                            <tr>
+                                <td>{{i._id}}</td>
+                                <td>{{i.pickup_date}}</td>
+                                <td>{{i.pickup_time}}</td>
+                                <td>{{i.pickup_location}}</td>
+                                <td>{{i.dropoff_location}}</td>
+                                <td>{{i.type}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                 </div>
+                </div>
+                <div class="radio_content radio_2">
+                    <div class="active">
+                        <table id="myTable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Pickup Date</th>
+                                    <th>Pickup Time</th>
+                                    <th>Pickup Location</th>
+                                    <th>Dropoff Location</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in scheduled_bookings %}
+                                <tr>
+                                    <td>{{i._id}}</td>
+                                    <td>{{i.pickup_date}}</td>
+                                    <td>{{i.pickup_time}}</td>
+                                    <td>{{i.pickup_location}}</td>
+                                    <td>{{i.dropoff_location}}</td>
+                                    <td>{{i.type}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+                <div class="radio_content radio_3">
+                    <div class="active">
+                        <table id="myTable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Pickup Date</th>
+                                    <th>Pickup Time</th>
+                                    <th>Pickup Location</th>
+                                    <th>Dropoff Location</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in history_bookings %}
+                                <tr>
+                                    <td>{{i._id}}</td>
+                                    <td>{{i.pickup_date}}</td>
+                                    <td>{{i.pickup_time}}</td>
+                                    <td>{{i.pickup_location}}</td>
+                                    <td>{{i.dropoff_location}}</td>
+                                    <td>{{i.type}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+          
+            </div>
+        </div>
+        {%endblock%}

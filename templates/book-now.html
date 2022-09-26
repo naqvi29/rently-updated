@@ -1,0 +1,461 @@
+{% extends 'layout.html' %} 
+{% block title %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/book-now.css">
+<style type="text/css">
+  /* naqvi29 */
+.autocomplete-items {
+    /*position: absolute;*/
+    position: relative;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /* top: 100%;
+    left: 0;
+    right: 0; */
+    max-height: 50vh;
+    overflow-y: auto;
+    widows: 100%;
+  }
+  .autocomplete-items div {
+    /* padding: 10px; */
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9;
+  }
+  .autocomplete-active {
+    background-color: #e9e9e9 !important;
+    color: #000;
+  }
+  /* ..  */
+</style>
+{% endblock %}
+{% block content %}   
+
+       
+        <form id="stepped" action="/book-now/{{car_id}}/{{booking_type}}" method="post">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <h1 class="text-center py-3">You selected {{booking_type|capitalize}} Booking Type.</h1>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="indicators d-flex justify-content-around py-4 text-light">
+                            <div class="rounded-circle bg-secondary px-2 shadow-sm mr-2">1 Pick-Up</div>
+                            <div class="rounded-circle bg-secondary px-2 shadow-sm mr-2">2 Drop-Off</div>
+                            <div class="rounded-circle bg-secondary px-2 shadow-sm mr-2">3 Base Rental</div>
+                            <div class="rounded-circle bg-secondary px-2 shadow-sm">
+                                4 Confirmation</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="fix-height position-relative">
+                            <div class="steps">
+                                <div class="row justify-content-center">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="inp1">Enter Your Pick-Up Date</label>
+                                            {% if date %}
+                                            <input type="DATE" id="inp1" name="pickup_date" class="form-control" value="{{date}}">
+                                            {% else %}
+                                            <input type="DATE" id="inp1" name="pickup_date" class="form-control">
+                                            {% endif %}
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="inp12">Time</label>
+                                            {% if time %}
+                                            <input type="time" name="time" name="pickup_time" id="inp12" class="form-control" value="{{time}}">
+                                            {% else %}
+                                            <input type="time" name="time" name="pickup_time" id="inp12" class="form-control">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp2"> Enter Your Location</label>
+                                    <!-- <label for="inp2"> Enter Your Location by clicking on the pin icon</label> -->
+                                    {% if pickup_location %}
+                                    <input type="text" id="pickup_location" name="pickup_location" class="form-control"
+                                        placeholder="Enter Your Location" value="{{pickup_location}}">
+                                    {% else %}
+                                    <input type="text" id="pickup_location" name="pickup_location" class="form-control"
+                                        placeholder="Enter Your Location">
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp2">Additional Pick-Up Description</label>
+                                    <input type="text" name="pickup_desc" id="inp2" class="form-control"
+                                        placeholder="Additional Pick-Up Description">
+                                </div>
+
+                            </div>
+                            <div class="steps">
+                                <div class="form-group">
+                                    <label for="inp2"> Enter Your Location</label>
+                                    <input type="text" id="dropoff_location" name="dropoff_location" class="form-control"
+                                        placeholder="Enter Your Location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp2">Additional Drop-Off Description</label>
+                                    <input type="text" id="inp2" name="dropoff_desc" class="form-control"
+                                        placeholder="Additional Pick-Up Description">
+                                </div>
+                            </div>
+                            <div class="steps">
+                                <!-- <div class="form-group">
+                                    <label for="inp3">Label 3</label>
+                                    <input type="text" id="inp3" class="form-control">
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-6 col-sm-3">
+                                        <!-- <h6>Pick-Up <a href="">Edit</a> </h6> -->
+                                        <h6>Pick-Up</h6>
+                                        <p id="pickup_address_confirm"></p>
+                                        <h6>Booking Type: <span id="booking_type_confirm"></span></h6>
+                                        </p>
+                                        <div class="img">
+                                            <img src="/static/images/cars/{{car.pic}}" class="img-fluid"
+                                                alt="">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-6 col-sm-3">
+                                        <h6>Dropoff </h6>
+                                        <p id="dropoff_location_confirm"></p>
+                                        <div class="custom-control custom-radio">
+                                            {% if booking_type == "full day" %}
+                                            <input type="radio" id="customRadio1" name="customRadio"
+                                                class="custom-control-input" value="full_day" checked>
+                                            {%else%}
+                                            <input type="radio" id="customRadio1" name="customRadio"
+                                                class="custom-control-input" value="full_day">
+                                            {%endif%}
+                                            <label class="custom-control-label color-1" for="customRadio1" style="color:black; !important">FULL DAY</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            {% if booking_type == "short rental" %}
+                                            <input type="radio" id="customRadio2" name="customRadio"
+                                                class="custom-control-input"  value="short_rental" checked>
+                                            {% else %}
+                                            <input type="radio" id="customRadio2" name="customRadio"
+                                                class="custom-control-input"  value="short_rental">
+                                            {%endif%}
+                                            <label class="custom-control-label color-1" for="customRadio2" style="color:black; !important">SHORT RENTAL</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            {% if booking_type == "self drive" %}
+                                            <input type="radio" id="customRadio3" name="customRadio"
+                                                class="custom-control-input"  value="self_drive" checked>
+                                            {%else%}
+                                            <input type="radio" id="customRadio3" name="customRadio"
+                                                class="custom-control-input"  value="self_drive">
+                                            {%endif%}
+                                            <label class="custom-control-label color-1" for="customRadio3" style="color:black; !important">SELF DRIVE</label>
+                                        </div>
+                                        </p>
+
+                                        <h1>
+                                            {{car.name}}</h1>
+                                            <!-- <span>(with driver)</span> -->
+                                        {% if booking_type == "short rental" %}
+                                        <h6>Select Hours </h6>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="hours1" name="hours"
+                                                class="custom-control-input" value="5" checked>
+                                            <label class="custom-control-label color-1" for="hours1" style="color:black; !important">5 Hours</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="hours2" name="hours"
+                                                class="custom-control-input"  value="6">
+                                            <label class="custom-control-label color-1" for="hours2" style="color:black; !important">6 Hours</label>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if booking_type == "self drive" %}
+                                        <h6>Select Days </h6>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="no_of_days1" name="no_of_days"
+                                                class="custom-control-input" value="5" checked>
+                                            <label class="custom-control-label color-1" for="no_of_days1" style="color:black; !important">14 Days</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="no_of_days2" name="no_of_days"
+                                                class="custom-control-input"  value="6">
+                                            <label class="custom-control-label color-1" for="no_of_days2" style="color:black; !important">24 Days</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="no_of_days3" name="no_of_days"
+                                                class="custom-control-input"  value="6">
+                                            <label class="custom-control-label color-1" for="no_of_days3" style="color:black; !important">30 Days</label>
+                                        </div>
+                                        {% endif %}
+                                    </div> 
+                                    <div class="col-6 col-sm-3 border_book" >
+                                        <p>Rate / day</p>
+                                        <p>Fuel / kilometer *</p>
+                                        <p>Base Fare</p>
+                                        <p>Overtime / hour</p>
+                                        <p>No. of Days</p>
+                                        <P>Discount Code (if any)</P>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio5" name="customRadio4"
+                                                class="custom-control-input" value="in">
+                                            <label class="custom-control-label color-1" for="customRadio5" style="color:black; !important">In City</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio4" name="customRadio4"
+                                                class="custom-control-input" value="out">
+                                            <label class="custom-control-label color-1" for="customRadio4" style="color:black; !important">Out City</label>
+                                        </div>
+                                        <p>Amount Payable
+                                            *Excluding fuel & overtime charges
+                                            (charges - view details )</p>
+
+                                    </div>
+                                    <div class="col-6 col-sm-3">
+                                        <!-- <p>PKR. 4,750</p>
+                                        <p>PKR. 28</p>
+                                        <p>PKR. 0</p>
+                                        <p>PKR. 250</p>
+                                        <P>1</P>
+                                        <a href="">Promo code</a> -->
+                                        <h6>PKR. {{car.price_per_day}}</h6>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="steps">
+                                <!-- <div class="form-group">
+                                    <label for="inp4">Label 4</label>
+                                    <input type="text" id="" class="form-control">
+                                </div> -->
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1 inp4">
+                                    <label class="custom-control-label color-1" for="customCheck1 inp4">Kindly note that the
+                                        Fuel Charges and Overtime will be applied based on the mileage of the car and
+                                        extra hours of the services (if any).Your final invoice will be generated after
+                                        adding the Fuel and Overtime charges at the end of your reservation. For more
+                                        details please read the Fuel and Overtime charges and terms of use.”</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 text-right mt_button">
+                        <button type="button" class="btnPrev btn btn-outline-danger">Prev</button>
+                        <button type="button"  onclick="address_changed()" class="btnNext btn btn-outline-danger">Next</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+{%endblock%}
+{%block scripts%}
+    <script>
+        $(".slider").owlCarousel({
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 2000, //2000ms = 2s;
+            autoplayHoverPause: true,
+        });
+    </script>
+
+  
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            class MultiStep {
+                constructor(formId) {
+                    let myForm = document.querySelector(formId),
+                        steps = myForm.querySelectorAll(".steps"),
+                        btnPrev = myForm.querySelector(".btnPrev"),
+                        btnNext = myForm.querySelector(".btnNext"),
+                        indicators = myForm.querySelectorAll(".rounded-circle"),
+                        inputClasses = ".form-control",
+                        currentTab = 0;
+
+                    // we'll need 4 different functions to do this
+                    showTab(currentTab);
+
+                    function showTab(n) {
+                        steps[n].classList.add("active");
+                        if (n == 0) {
+                            btnPrev.classList.add("hidden");
+                            btnPrev.classList.remove("show");
+                        } else {
+                            btnPrev.classList.add("show");
+                            btnPrev.classList.remove("hidden");
+                        }
+                        if (n == steps.length - 1) {
+                            btnNext.textContent = "Confirm ";
+                        } else {
+                            btnNext.textContent = "Next";
+                        }
+                        showIndicators(n);
+                    }
+
+                    function showIndicators(n) {
+                        for (let i = 0; i < indicators.length; i++) {
+                            indicators[i].classList.replace("bg-danger", "bg-success");
+                        }
+                        indicators[n].className += " bg-danger";
+                    }
+
+                    function clickerBtn(n) {
+                        if (n == 1 && !validateForm()) return false;
+                        steps[currentTab].classList.remove("active");
+                        currentTab = currentTab + n;
+                        if (currentTab >= steps.length) {
+                            myForm.submit();
+                            return false;
+                        }
+                        showTab(currentTab);
+                    }
+                    // Do whatever validation you want
+                    function validateForm() {
+                        let input = steps[currentTab].querySelectorAll(inputClasses),
+                            valid = true;
+                        for (let i = 0; i < input.length; i++) {
+                            if (input[i].value == "") {
+                                if (!input[i].classList.contains("invalid")) {
+                                    input[i].classList.add("invalid");
+                                }
+                                valid = false;
+                            }
+                            if (!input[i].value == "") {
+                                if (input[i].classList.contains("invalid")) {
+                                    input[i].classList.remove("invalid");
+                                }
+                            }
+                        }
+                        return valid;
+                    }
+                    btnPrev.addEventListener("click", () => {
+                        clickerBtn(-1);
+                    });
+                    btnNext.addEventListener("click", () => {
+                        clickerBtn(1);
+                    });
+                }
+            }
+            let MS = new MultiStep("#stepped");
+        });
+
+    </script>
+    <script type="text/javascript">
+        function address_changed(){
+        console.log('start')
+        pl = document.getElementById("pickup_location").value;
+        console.log(pl);
+        dl = document.getElementById("dropoff_location").value;
+        console.log(dl);
+        document.getElementById("pickup_address_confirm").innerHTML =pl;
+        document.getElementById("dropoff_location_confirm").innerHTML =dl;
+        }
+    </script>
+
+<!-- for auto complete  -->
+<script type="text/javascript">
+   var arr = ["Askari 1", "Askari 2", "Askari 3", "Askari 4", "Askari 5", "Bahria Town - Precinct 1", "Bahria Town - Precinct 10", "Bahria Town - Precinct 11", "Bahria Town - Precinct 12", "Bahria Town - Precinct 13", "Bahria Town - Precinct 14", "Bahria Town - Precinct 15", "Bahria Town - Precinct 16", "Bahria Town - Precinct 17", "Bahria Town - Precinct 18", "Bahria Town - Precinct 19", "Bahria Town - Precinct 2", "Bahria Town - Precinct 20", "Bahria Town - Precinct 21", "Bahria Town - Precinct 22", "Bahria Town - Precinct 23", "Bahria Town - Precinct 24", "Bahria Town - Precinct 25", "Bahria Town - Precinct 26", "Bahria Town - Precinct 27", "Bahria Town - Precinct 28", "Bahria Town - Precinct 29", "Bahria Town - Precinct 3", "Bahria Town - Precinct 30", "Bahria Town - Precinct 31", "Bahria Town - Precinct 32", "Bahria Town - Precinct 33", "Bahria Town - Precinct 4", "Bahria Town - Precinct 5", "Bahria Town - Precinct 6", "Bahria Town - Precinct 7", "Bahria Town - Precinct 8", "Bahria Town - Precinct 9", "BufferZone - Sector 15 A 1", "BufferZone - Sector 15 A 2", "BufferZone - Sector 15 A 3", "BufferZone - Sector 15 A 4", "BufferZone - Sector 15 A 5", "BufferZone - Sector 15 B", "BufferZone - Sector 16 A", "BufferZone - Sector 16 B", "Cantonment", "Clifton - Block 1", "Clifton - Block 2", "Clifton - Block 3", "Clifton - Block 4", "Clifton - Block 5", "Clifton - Block 6", "Clifton - Block 7", "Clifton - Block 8", "Clifton - Block 9", "Clifton - Kehkashan", "DHA - Phase 1", "DHA - Phase 2", "DHA - Phase 3", "DHA - Phase 4", "DHA - Phase 5", "DHA - Phase 6", "DHA - Phase 7", "DHA - Phase 8", "DHA - Phase 9", "F.B Area - Azizabad", "F.B Area - B1 Area", "F.B Area - B Area", "F.B Area - Block 1", "F.B Area - Block 10", "F.B Area - Block 11", "F.B Area - Block 12", "F.B Area - Block 13", "F.B Area - Block 14", "F.B Area - Block 15", "F.B Area - Block 16", "F.B Area - Block 17", "F.B Area - Block 18", "F.B Area - Block 19", "F.B Area - Block 2", "F.B Area - Block 20", "F.B Area - Block 21", "F.B Area - Block 22", "F.B Area - Block 3", "F.B Area - Block 4", "F.B Area - Block 5", "F.B Area - Block 6", "F.C Area - C1 Area", "F.C Area - C Area", "Garden - Garden East", "Garden - Garden West", "Garden - Soldier Bazaar", "Gulistan-e-Johar - Block 1", "Gulistan-e-Johar - Block 10", "Gulistan-e-Johar - Block 11", "Gulistan-e-Johar - Block 12", "Gulistan-e-Johar - Block 13", "Gulistan-e-Johar - Block 14", "Gulistan-e-Johar - Block 15", "Gulistan-e-Johar - Block 16", "Gulistan-e-Johar - Block 17", "Gulistan-e-Johar - Block 18", "Gulistan-e-Johar - Block 19", "Gulistan-e-Johar - Block 2", "Gulistan-e-Johar - Block 20", "Gulistan-e-Johar - Block 3", "Gulistan-e-Johar - Block 4", "Gulistan-e-Johar - Block 5", "Gulistan-e-Johar - Block 6", "Gulistan-e-Johar - Block 7", "Gulistan-e-Johar - Block 8", "Gulistan-e-Johar - Block 9", "Gulshan-e-Hadeed - Data Nagar", "Gulshan-e-Hadeed - EIDU Goth", "Gulshan-e-Hadeed - Gulshan-e-Mauzzam", "Gulshan-e-Hadeed - Gulshan-e-Rehman", "Gulshan-e-Hadeed - Mehran Road", "Gulshan-e-Hadeed - Phase 1", "Gulshan-e-Hadeed - Phase 2", "Gulshan-e-Hadeed - Phase 3", "Gulshan-e-Hadeed - PTCL Satellite Station", "Gulshan-e-Hadeed - Shah Latif Town", "Gulshan-e-Hadeed - Shahnawaz Goth", "Gulshan-e-Hadeed - Shah Town", "Gulshan-e-Hadeed - Steel Town", "Gulshan-e-Hadeed - TCP Godowns", "Gulshan-e-Iqbal - Adamjee Nagar", "Gulshan-e-Iqbal - Block 1", "Gulshan-e-Iqbal - Block 10", "Gulshan-e-Iqbal - Block 11", "Gulshan-e-Iqbal - Block 12", "Gulshan-e-Iqbal - Block 13", "Gulshan-e-Iqbal - Block 14", "Gulshan-e-Iqbal - Block 15", "Gulshan-e-Iqbal - Block 16", "Gulshan-e-Iqbal - Block 17", "Gulshan-e-Iqbal - Block 18", "Gulshan-e-Iqbal - Block 19", "Gulshan-e-Iqbal - Block 2", "Gulshan-e-Iqbal - Block 3", "Gulshan-e-Iqbal - Block 4", "Gulshan-e-Iqbal - Block 5", "Gulshan-e-Iqbal - Block 6", "Gulshan-e-Iqbal - Block 7", "Gulshan-e-Iqbal - Block 8", "Gulshan-e-Iqbal - Block 9", "Gulshan-e-Iqbal - Civic Center", "Gulshan-e-Iqbal - Dhoraji", "Korangi - Abdullah Shah Noorani Pahari Colony", "Korangi - Korangi Industrial Area", "Korangi - Nasir Colony", "Korangi - PAF Base Korangi Creek", "Korangi - Zaman Town", "Korangi - Zia Colony", "Landhi - Alflah Housing Society", "Landhi - Awami Colony", "Landhi - Bagh-e-Korangi", "Landhi - Bakhtawar Goth", "Landhi - Barmi Colony", "Landhi - Bhutto Nagar", "Landhi - Future Colony", "Landhi - Gulshan-e-Rafi", "Landhi - Ilyas Goth", "Landhi - Labour Colony", "Landhi - Landhi Industrial Area", "Landhi - Muslimabad Colony", "Landhi - Muzaffarabad Colony", "Landhi - Punjab Town", "Landhi - Qasim Town", "Landhi - Sadat Colony", "Landhi - Shah Khalid Colony", "Landhi - Sharafi Goth", "Landhi - Zamanabad", "Liaquatabad - Block 1", "Liaquatabad - Block 10", "Liaquatabad - Block 2", "Liaquatabad - Block 3", "Liaquatabad - Block 4", "Liaquatabad - Block 5", "Liaquatabad - Block 6", "Liaquatabad - Block 7", "Liaquatabad - Block 8", "Liaquatabad - Block 9", "Malir - Malir", "Malir - Malir Cantt", "Nazimabad - Block 1", "Nazimabad - Block 2", "Nazimabad - Block 3", "Nazimabad - Block 4", "Nazimabad - Block 5", "North Karachi  - Sector 10", "North Karachi  - Sector 11 - A", "North Karachi  - Sector 11 - B", "North Karachi  - Sector 11 - C 1", "North Karachi  - Sector 11 - C 2", "North Karachi  - Sector 11 - C 3", "North Karachi  - Sector 11 - E", "North Karachi  - Sector 11 - H", "North Karachi  - Sector 11 - I", "North Karachi  - Sector 11 - K", "North Karachi  - Sector 11 - L", "North Karachi  - Sector 2", "North Karachi  - Sector 3", "North Karachi  - Sector 4", "North Karachi  - Sector 5 - A 1", "North Karachi  - Sector 5 - A 2", "North Karachi  - Sector 5 - A 3", "North Karachi  - Sector 5 - A 4", "North Karachi  - Sector 5 - B 1", "North Karachi  - Sector 5 - B 2", "North Karachi  - Sector 5 - B 3", "North Karachi  - Sector 5 - B 4", "North Karachi  - Sector 5 - C 1", "North Karachi  - Sector 5 - C 2", "North Karachi  - Sector 5 - C 3", "North Karachi  - Sector 5 - C 4", "North Karachi  - Sector 5 - I", "North Karachi  - Sector 5 - J", "North Karachi  - Sector 5 - K", "North Karachi  - Sector 5 - L", "North Karachi  - Sector 5 - M", "North Karachi  - Sector 6", "North Karachi  - Sector 7 - D 1", "North Karachi  - Sector 7 - D 2", "North Karachi  - Sector 7 - D 3", "North Karachi  - Sector 7 - D 4", "North Karachi  - Sector 8", "North Karachi  - Sector 9", "North Nazimabad - Block A", "North Nazimabad - Block B", "North Nazimabad - Block C", "North Nazimabad - Block D", "North Nazimabad - Block E", "North Nazimabad - Block F", "North Nazimabad - Block G", "North Nazimabad - Block H", "North Nazimabad - Block I", "North Nazimabad - Block J", "North Nazimabad - Block K", "North Nazimabad - Block L", "North Nazimabad - Block M", "North Nazimabad - Block N", "North Nazimabad - Block O", "North Nazimabad - Block P", "North Nazimabad - Block Q", "North Nazimabad - Block R", "North Nazimabad - Block S", "North Nazimabad - Block T", "Old Town - Bhimpora", "Old Town - Bohra Pir", "Old Town - Bombay Bazar", "Old Town - Jodia Bazar", "Old Town - Kagzi Bazar", "Old Town - Kakri Ground", "Old Town - Kamil Gali", "Old Town - Khada Market", "Old Town - Kharadar", "Old Town - Lee Market", "Old Town - Mithadar", "Old Town - Nanwara", "Old Town - Nishter Road", "Old Town - Pan Mandi", "Old Town - Ramswami", "Old Town - Ranchorline", "Orangi Town - Banaras Town", "Orangi Town - Bangla Bazaar", "Orangi Town - Bilal Colony", "Orangi Town - Katti Pahari", "Orangi Town - Moria Goth Orangi", "Orangi Town - Orangi", "Orangi Town - Sector 14 - A", "Orangi Town - Sector 14 - C", "Orangi Town - Thorani Goth", "Baldiya Town", "Baloch Colony", "Civil Line", "FC Area", "Firdous Colony", "Gulshan-e-Maymar", "Hawksbay", "I.I Chundrigar", "Jamshed Road", "K.D.A Officers", "Kemari", "Liyari", "M.A Jinnah Rd", "Manora", "New Karachi", "New Surjani", "PIB Colony", "Pipri Goth", "Rizvia Society", "Saddar", "Scheme 33", "Shabbirabad", "P.E.C.H.S - Block 1", "P.E.C.H.S - Block 2", "P.E.C.H.S - Block 3", "P.E.C.H.S - Block 4", "P.E.C.H.S - Block 5", "P.E.C.H.S - Block 6", "P.E.C.H.S - Khalid Bin Walid", "P.E.C.H.S - Tariq Road", "S.I.T.E - Golimar", "S.I.T.E - S.I.T.E", "Shah Faisal Colony - Aswan Town", "Shah Faisal Colony - Gulshan-e-Asghar", "Shah Faisal Colony - Shah Faisal Colony 1", "Shah Faisal Colony - Shah Faisal Colony 5", "F.B Area \u2013 Block 7", "F.B Area - Block 9", "P.E.C.H.S - Block 7", "Aram Bagh", "Bath Island", "University Road", "Bahadurabad", "Shah Faisal Colony - 4", "Banglore Town", "Fowler Lines", "Shah Faisal Colony - Shamsi Society", "Gulshan-e-Jamal", "Shah Faisal Colony - 3", "Shah Faisal Colony - Green Town", "Darwaish Colony", "Korangi - Sector 31 B", "Firdous Colony", "North Nazimabad - Block W", "K.A.E.C.H.S", "Mehmoodabad", "Korangi - Mehran Town", "Landhi Town - 36 B", "Karachi Memon Society", "Madras Cooperative Housing Society", "Shahrah-e-Faisal", "Korangi - Sector 41 B", "Clifton - Delhi Colony", "Korangi - Sector 32 B", "Dhoraji - Adamjee Nagar", "Bhimpura", "Dhoraji - CP & Berar Society", "Shahra-e-Faisal - Umar Colony", "Model Colony", "Gulshan-e-Shamim", "Clifton - Shah Rasool Colony", "North Karachi  - Sector 12 C", "Jail Road - Hyderabad Colony", "Napier Quarter", "Gulzar-e-Hijri", "North Karachi  - Sector 12 A", "Shahra-e-Faisal - Jinnah Housing Society", "K.D.A Scheme 1", "Clifton - Punjab Colony", "Korangi - Sector 31 D", "Clifton - Zamzama", "Parsi Colony", "Qayyumabad", "Khokrapar", "Shah Faisal Colony - Muslimabad Malir City", "F.B Area - Block 8", "Nanak Wara", "Mohammad Ali Society", "Manzoor Colony", "Dalmia", "Defence View - Phase 1", "Defence View - Phase 2", "KDA Officers Housing Society", "Karimabad", "Soldier Bazar", "Hussainabad", "Sharfabad Society", "Gharibabad", "Sindhi Muslim Cooperative Housing Society"]
+  let autoInput = document.getElementById("pickup_location");
+  let currentFocus;
+  autoInput.addEventListener("input", function (e) {
+    let a,
+      b,
+      i,
+      val = this.value;
+    console.log({ a, b, i, val });
+    close();
+    if (!val) {
+      return false;
+    }
+    currentFocus = -1;
+    a = document.createElement("div");
+    a.setAttribute("id", this.id + "autocomplete-list");
+    a.setAttribute("class", "autocomplete-items");
+    this.parentNode.appendChild(a);
+    
+    let matchingWordList = arr.filter((item) =>
+      item.toUpperCase().includes(val.toUpperCase())
+    );
+
+    matchingWordList.forEach((item) => {
+      b = document.createElement("div");
+      b.innerHTML = item.substr(0, val.length);
+      b.innerHTML += item.substr(val.length);
+      b.innerHTML += "<input type='hidden' value='" + item + "'>";
+      b.addEventListener("click", function (e) {
+        autoInput.value = this.getElementsByTagName("input")[0].value;
+        close();
+      });
+      a.appendChild(b);
+    });
+  });
+  let temp = "";
+  autoInput.addEventListener("keypress", function (e) {
+    if (
+      arr.filter((item) =>
+        item.toUpperCase().includes((autoInput.value + e.key).toUpperCase())
+      ).length <= 0
+    ) {
+      autoInput.value = temp;
+      return;
+    } else {
+      temp = autoInput.value;
+    }
+  });
+  autoInput.addEventListener("keydown", function (e) {
+    var x = document.getElementById(this.id + "autocomplete-list");
+    if (x) x = x.getElementsByTagName("div");
+    if (e.keyCode == 40) {
+      currentFocus++;
+      console.log(x);
+      active(x);
+    } else if (e.keyCode == 38) {
+      currentFocus--;
+      console.log(x);
+      active(x);
+    } else if (e.keyCode == 13) {
+      e.preventDefault();
+      console.log(x);
+      if (currentFocus > -1) {
+        if (x) x[currentFocus].click();
+      }
+    }
+  });
+  function active(x) {
+    if (!x) return false;
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = x.length - 1;
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function close(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != autoInput) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+    
+
+    
+  };
+</script>
+{%endblock%}
+
+

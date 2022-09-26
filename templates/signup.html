@@ -1,0 +1,40 @@
+{% extends 'layout.html' %} 
+{% block title %}Signup{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+<section class="area-login">
+    <div class="Sign">
+      <div class="">
+        <!-- <img src="https://img.icons8.com/fluency/240/000000/google-logo.png" /> -->
+        <h1 class="">Sign Up</h1>
+      </div>
+      <form action="/signup" method="post">
+        <input type="text" name="name" id="name" placeholder="Enter Your Name" autofocus required/>
+        <input type="number" name="phone" id="num" placeholder="Enter Your Phone" autofocus required/>
+        <input type="email" name="email" id="email" placeholder="Enter Your Email" autofocus required/>
+
+        <input type="password" name="password" id="password" placeholder="Enter YOur Password" required/>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </section>
+
+        
+{% endblock %}
+
+{% block scripts %}
+{% if error %}
+<script>
+  Swal.fire(
+  'Oops!',
+  '{{error}}',
+  'error'
+)
+</script>
+{% endif %}
+
+{% endblock %}

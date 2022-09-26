@@ -1,0 +1,203 @@
+{% extends 'admin-layout.html' %} 
+{% block title %}Add Vehicle{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="page-header">
+    <h3 class="page-title">
+      <span class="page-title-icon bg-gradient-primary text-white me-2">
+        <i class="mdi mdi-home"></i>
+      </span> Register a new Vehicle
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">
+          <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <!-- <h4 class="card-title">Default form</h4>
+            <p class="card-description"> Basic form layout </p> -->
+            <form action="/add-vehicle" method="post" name="myForm" class="forms-sample" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="exampleInputUsername1">Name</label>
+                <input type="text" name="name" class="form-control" id="exampleInputUsername1" placeholder="Make Model" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Old Price</label>
+                <input type="number" step="any" min="0" name="price_per_day_old" class="form-control" id="price_per_day_old" placeholder="Old Price /day" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Discounted Price</label>
+                <input type="number" step="any" min="0" name="price_per_day" class="form-control" id="price_per_day" placeholder="Price /day" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleSelectGender">Transmission</label>
+                <select name="transmission" class="form-control" id="exampleSelectGender" required>
+                  <option selected value="automatic">Automatic</option>
+                  <option value="manual">Manual</option>
+                </select>
+              </div>
+              <div class="form-group row">
+                <!-- <label class="col-sm-3 col-form-label">Driver</label> -->
+                <div class="col-sm-4">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="with_driver" type="radio" class="form-check-input" id="DriverRadios1" value="true" checked=""> With Driver <i class="input-helper"></i></label>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="with_driver" type="radio" class="form-check-input" id="DriverRadios2" value="false"> Without Driver <i class="input-helper"></i></label>
+                  </div>
+                </div>
+              </div>
+              <div id="extras">
+                <div class="form-group">
+                  <label for="exampleSelectGender">Full Day</label>
+                  <select name="full_day" class="form-control" id="exampleSelectGender" required>
+                    <option selected value="10">10 Hours</option>
+                    <option value="12">12 Hours</option>
+                    <option value="24">24 Hours</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Fuel Average</label>
+                  <input type="number" step="any" min="0" name="fuel_average" class="form-control" id="" placeholder="Fuel Average km/ltr" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Overtime Cost</label>
+                  <input type="number" step="any" min="0" name="overtime" class="form-control" id="" placeholder="Over time cost" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="exampleSelectGender">Allowed City</label>
+                <select onchange="change_city();" name="city" class="form-control" id="exampleSelectcity" required>
+                  <option selected value="in">In city only</option>
+                  <option value="out" >Out City allowed</option>
+                </select>
+              </div>
+              <div id="outside_city">
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="ac" type="radio" class="form-check-input" id="acRadios1" value="true" checked=""> With Air Condition <i class="input-helper"></i></label>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="ac" type="radio" class="form-check-input" id="acRadios2" value="false"> Without Air Condition <i class="input-helper"></i></label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="doors" type="radio" class="form-check-input" id="doorsRadios1" value="4" checked=""> 4 Doors <i class="input-helper"></i></label>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input name="doors" type="radio" class="form-check-input" id="doorsRadios2" value="2"> 2 Doors <i class="input-helper"></i></label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="exampleSelectGender">Category</label>
+                <select name="category" class="form-control" id="exampleSelectGender" required>
+                  <option selected value="budget">Budget</option>
+                  <option value="standard">Standard</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="suv">SUV</option>
+                  <option value="vans">Vans & Coasters</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Upload Vehicle Picture</label>
+                    <input name="pic" type="file" class="form-control file-upload-info" id="exampleFormControlFile1">
+                </div>
+              <button type="submit" class="btn btn-gradient-success me-2">Add Now</button>
+              <button class="btn btn-light">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <a href="/registered-vehicles"><button type="button" class="btn btn-inverse-dark btn-fw">Back</button></a>
+            
+      </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var rad = document.myForm.with_driver;
+var prev = null;
+for (var i = 0; i < rad.length; i++) {
+    rad[i].addEventListener('change', function() {
+        (prev) ? console.log(prev.value): null;
+        if (this !== prev) {
+            prev = this;
+        }
+        console.log(this.value)
+        extras_div = document.getElementById("extras");
+        if (this.value=="false"){
+          extras_div.innerHTML =``;
+        }else{
+          extras_div.innerHTML =``;
+          extras_div.innerHTML =`<div class="form-group">
+                  <label for="exampleSelectGender">Full Day</label>
+                  <select name="full_day" class="form-control" id="exampleSelectGender" required>
+                    <option selected value="10">10 Hours</option>
+                    <option value="12">12 Hours</option>
+                    <option value="24">24 Hours</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Fuel Average</label>
+                  <input type="number" step="any" min="0" name="fuel_average" class="form-control" id="" placeholder="Fuel Average km/ltr" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Overtime Cost</label>
+                  <input type="number" step="any" min="0" name="overtime" class="form-control" id="" placeholder="Over time cost" required>
+                </div>`;
+        }
+
+    });
+}  
+
+function change_city(){
+  sl = document.getElementById("exampleSelectcity").value;
+  if (sl=="in"){
+    d = document.getElementById("outside_city");
+    d.innerHTML = ``;
+  }else{
+    d = document.getElementById("outside_city");
+    d.innerHTML = `
+                <div class="form-group">
+                  <label for="out_city_cost">Outside City Additional Cost</label>
+                  <input type="number" step="any" min="0" name="out_city_cost" class="form-control" id="out_city_cost" placeholder="Outside City Additional Cost">
+                </div>`
+  }
+}
+</script>
+        
+{% endblock %}
+

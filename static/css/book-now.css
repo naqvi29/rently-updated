@@ -1,0 +1,402 @@
+*
+{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+
+.indicators * {
+    transition: all 0.4s ease-in-out;
+}
+
+.fix-height {
+    min-height: 200px;
+}
+
+.steps {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+}
+
+.steps.active {
+    width: 100%;
+    z-index: 1;
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.4s ease-in-out;
+}
+
+/* animation for input boxes */
+
+.form-control.invalid {
+    border: 1px solid #ec2626;
+    /* paste any animation you want */
+    animation: shaking 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transition: all 0.4s ease-in-out;
+}
+
+@keyframes shaking {
+
+    10%,
+    90% {
+        transform: translate3d(-2px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(4px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-8px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(8px, 0, 0);
+    }
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.4s ease-in-out;
+}
+
+.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: all 0.4s ease-in-out;
+}
+
+.rounded-circle {
+    padding: 20px;
+}
+
+@media screen and (min-width: 768px) {
+    .fix-height {
+        min-height: 311px;
+    }
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.user-detail .form-check-label {
+    color: rgb(255, 255, 255);
+}
+
+.user-detail .form-check-input {
+
+    margin-left: -15px;
+}
+
+/*
+ CSS for the main interaction
+*/
+.tabset>input[type="radio"] {
+    position: absolute;
+    left: -200vw;
+}
+
+.tabset .tab-panel {
+    display: none;
+}
+
+.tabset>input:first-child:checked~.tab-panels>.tab-panel:first-child,
+.tabset>input:nth-child(3):checked~.tab-panels>.tab-panel:nth-child(2),
+.tabset>input:nth-child(5):checked~.tab-panels>.tab-panel:nth-child(3),
+.tabset>input:nth-child(7):checked~.tab-panels>.tab-panel:nth-child(4),
+.tabset>input:nth-child(9):checked~.tab-panels>.tab-panel:nth-child(5),
+.tabset>input:nth-child(11):checked~.tab-panels>.tab-panel:nth-child(6) {
+    display: block;
+}
+
+/*
+   Styling
+  */
+
+.tabset>label {
+    position: relative;
+    display: inline-block;
+    padding: 15px 15px 25px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tabset>label::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    width: 22px;
+    height: 4px;
+    background: #8d8d8d;
+}
+
+.tabset>label:hover,
+.tabset>input:focus+label {
+    color: #cf5a27;
+}
+
+.tabset>label:hover::after,
+.tabset>input:focus+label::after,
+.tabset>input:checked+label::after {
+    background: #cf5a27;
+}
+
+.tabset>input:checked+label {
+    border-color: #ccc;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+}
+
+.tab-panel {
+    padding: 30px 0;
+    border-top: 1px solid #ccc;
+}
+
+
+
+.tabset {
+    max-width: 65em;
+    margin: 10px;
+}
+
+.left {
+    /* position: absolute; */
+    display: inline-block;
+    font-weight: 700;
+}
+
+.right {
+    float: right;
+
+}
+
+input,
+label {
+    margin: 5px 5px;
+}
+
+.form-group {
+    margin: 30px auto;
+    /* width: 450px; */
+}
+
+.form-control {
+    float: left;
+}
+
+#inputStreet {
+    width: 100%;
+}
+
+#inputCity {
+    width: 50%;
+}
+
+#inputState {
+    width: 15%;
+}
+
+#inputZip {
+    width: 28%;
+}
+
+#inputCounty {
+    width: 45%;
+}
+
+#inputCountry {
+    width: 50%;
+}
+
+
+
+
+
+
+
+
+.wrapper {
+    width: 950px;
+    /* height: 650px; */
+    background: #f7f7f7;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.wrapper .radio_tabs {
+    height: 60px;
+    background: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 18px;
+    display: flex;
+    box-shadow: 0 0 2px rgb(0 0 0 / 10%);
+    justify-content: center;
+}
+
+.wrapper .radio_tabs label {
+    margin-right: 15px;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    padding-left: 28px;
+}
+
+/* 
+.wrapper .radio_tabs .radio_mark:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  background: url("https://i.imgur.com/3OGSx5M.png.png") no-repeat 0 0;
+  width: 22px;
+  height: 22px;
+} */
+
+.wrapper .radio_tabs label .input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+}
+
+.wrapper .radio_tabs label .input:checked~.radio_mark {
+    color: #ff5d66;
+}
+
+.wrapper .radio_tabs label .input:checked~.radio_mark:before {
+    background-position: 0 -23px;
+    width: 22px;
+    height: 22px;
+}
+
+.wrapper .content {
+    width: 100%;
+    height: calc(100% - 70px);
+    background: #fff;
+    border-radius: 5px;
+    padding: 18px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .content p {
+    font-size: 15px;
+    line-height: 22px;
+    margin-bottom: 15px;
+}
+
+
+.radio_content .active {
+    text-align: center;
+    height: 300px;
+    padding: 40px;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+    .wrapper {
+        width: 100%;
+        /* height: 650px; */
+        background: #f7f7f7;
+        margin: 20px auto;
+        padding: 12px;
+        border-radius: 5px;
+    }
+    .right {
+        font-size: 12px;
+    }
+    .form-group {
+        margin: 7px auto;
+        /* width: 285px; */
+    }
+    .tab-panel h2{
+        font-size: 20px;
+    }
+    .tab-panel form label{
+        font-size: 10px;
+
+    }
+    .tab-panel form input{
+        font-size: 12px;
+
+    }
+    .rounded-circle {
+        padding: 6px;
+        font-size: 7px;
+    }
+    .fix-height {
+        min-height: 376px;
+    }
+    .steps .row h6{
+        font-size: 10px !important;
+    }
+    .steps p {
+        margin-bottom: 0px;
+        font-size: 9px;
+    }
+    .steps  label{
+        font-size: 13px;
+    }
+ }
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}

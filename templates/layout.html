@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="/static/images/fav/apple-touch-icon.png">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/slider.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    {% endblock %}
+    <link rel="stylesheet" href="/static/css/book-now.css">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- whatsapp popup -->
+    <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+    <div class="elfsight-app-8d497432-d86b-4240-aaf3-7a5329e3d59b"></div>
+    <!-- whatsapp end  -->
+</head>
+
+<body>
+    <section class="header_top">
+        <div class="nav">
+            <input type="checkbox" id="nav-check">
+            <div class="nav-header">
+                <div class="nav-title">
+                    <a class="navbar-brand" href="/"><img src="/static/images/logo/logo.png" alt=""></a>
+
+                </div>
+            </div>
+            <div class="nav-btn">
+                <label for="nav-check">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="nav-links">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/about">About Us <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/search-car">Search A Car</a>
+                <a class="nav-link" href="/corporate-enquiries">Corporate Enquiries</a>
+                <a class="nav-link" href="/our-clients">Our Client</a>
+
+                <a class="nav-link" href="/contact">Contact Us</a>
+                <a class="nav-link" href="/blog">Blog</a>
+
+                {% if loggedin %}
+                <!-- <a class="nav-link" href="#" onclick="todo()">My Profile</a> -->
+                <!-- <a class="nav-link" href="#" onclick="todo()">My Bookings</a> -->
+                <!-- <a class="nav-link" href="/userprofile/{{userid}}">My Profile</a>
+                <a class="nav-link" href="/my-bookings">My Bookings</a>
+                <a class="nav-link" href="/logout">Logout</a> -->
+                
+                <div class="dropdown">
+                    <a class="nav-link" href="#" class="dropbtn"><i class="fa fa-caret-down"></i> My
+                        Account</a>
+                    <div class="dropdown-content">
+                        <a href="/userprofile/{{userid}}">My Profile</a>
+                        <a href="/my-bookings">My Booking</a>
+                        <a href="/logout">Sign Out</a>
+                    </div>
+                </div>
+
+                {% else %}
+                <a class="nav-link" href="/login"> Login </a>
+                <a class="nav-link" href="/signup"> Sign Up </a>
+                {% endif %}
+                
+
+
+
+            </div>
+        </div>
+        {% block content %} {% endblock %}
+        <!-- <div class="container">
+            <h1 class="text-center">ABOUT US</h1>
+            <hr>
+            <div class="text-about">
+
+                <p>Powe#cf5a27 by state-of-the-art technology, Rently is the first of its kind, on-demand, car-rental
+                    marketplace gea#cf5a27 to disrupt the traditional renting industry.
+                    <br>
+                    <br>
+                    Rently’s car-rental services are available at your fingertips online, for a more modern and
+                    convenient
+                    customer experience.
+                    <br>
+                    <br>
+                    Rently provides both on-demand and pre-scheduled vehicles for any situation, occasion or event, such
+                    as:
+                </p>
+
+
+
+                <hr>
+                <ul>
+                    <li>Corporate Office Staff</li>
+                    <li>Tours and Trips</li>
+                    <li>Weddings</li>
+                    <li>Families / Individuals</li>
+                </ul>
+                <hr>
+
+
+                <p>
+                    One of the biggest strengths of Rently is its versatility. Our wide-range of latest models and
+                    well-maintained cars, is suited for everyone and all occasions.
+
+                    <br>
+                    <br>
+                    At Rently, each car and driver must undergo ‘Rently Selection Tests’ before becoming operational.
+                    Quality, being the cornerstone of Rently services, is ensu#cf5a27 in every mile.
+                </p>
+            </div>
+            <hr>
+        </div> -->
+
+    </section>
+
+
+
+
+
+    <div class="top_footer">
+
+    </div>
+
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-cta pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="cta-text">
+                                <h4>Find us</h4>
+                                <span>5C 21/7 Paposh Nagar Nazimabad Karachi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="fas fa-phone"></i>
+                            <div class="cta-text">
+                                <h4>Call us</h4>
+                                <span>+92-3332161419</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-4 mb-30">
+                        <div class="single-cta">
+                            <i class="far fa-envelope-open"></i>
+                            <div class="cta-text">
+                                <h4>Mail us</h4>
+                                <span>support@drivenow.pk</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-content pt-5 pb-5">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-logo">
+                                <a href="index.html"><img src="/static/images/logo/logo.png" class="img-fluid"
+                                        alt="logo"></a>
+                            </div>
+                            <div class="footer-text">
+                                <!-- <p>Lorem ipsum dolor sit amet, consec tetur adipisicing elit, sed do eiusmod tempor
+                                    incididuntut consec
+                                    tetur adipisicing
+                                    elit,Lorem ipsum dolor sit amet.</p> -->
+                                <p>DriveNow car-rental services are available at your fingertips online, for a more modern and convenient customer experience.</p>
+                            </div>
+                            <div class="footer-social-icon">
+                                <span>Follow us</span>
+                                <a href="#"><i class="fab fa-facebook-f facebook-bg"></i></a>
+                                <a href="#"><i class="fab fa-twitter twitter-bg"></i></a>
+                                <a href="#"><i class="fab fa-google-plus-g google-bg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h5>Useful Links</h5>
+                            </div>
+                            <ul>
+                                <li><a href="/index">Home</a></li>
+                <li><a href="/about">About US</a></li>
+                <li><a href="/search-car">Search A Car</a></li>
+                <li><a href="/corporate-enquiries">Corporate Enquiries</a></li>
+                <li><a href="/our-clients">Our Client</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Registration</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
+                        <div class="footer-widget">
+                            <div class="footer-widget-heading">
+                                <h5>Subscribe</h5>
+                            </div>
+                            <div class="footer-text mb-25">
+                                <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
+                            </div>
+                            <div class="subscribe-form">
+                                <form action="#">
+                                    <input type="text" id="email" name="email" placeholder="Email Address">
+                                    <button><i class="fab fa-telegram"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 text-center text-lg-left">
+                        <div class="copyright-text">
+                            <p>Copyright &copy; 2022, All Right Reserved <a href="">Webtrica</a></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
+                        <div class="footer-menu">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about">Terms</a></li>
+                                <li><a href="/about">Privacy</a></li>
+                                <li><a href="/about">Policy</a></li>
+                                <li><a href="/contact">Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+   
+    {% block scripts %}{% endblock %}
+    <script>
+        $(".slider").owlCarousel({
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: 2000, //2000ms = 2s;
+            autoplayHoverPause: true,
+        });
+    </script>
+
+    <script src="/static/js/slider.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+
+    <script>
+        function todo(){
+            
+            Swal.fire(
+            'Oops!',
+            'Not Completed yet',
+            'error'
+        )
+        }
+      </script>
+ 
+
+</body>
+
+</html>

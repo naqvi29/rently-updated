@@ -1,0 +1,165 @@
+{% extends 'layout.html' %} 
+{% block title %}User Profile{% endblock %}
+{% block head %}
+{{ super() }}
+<!-- <link rel="stylesheet" href="/static/css/book-now.css"> -->
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-sm-4">
+            <div class="img-user">
+                <img src="/static/images/logo/user.png" class="img-fluid" alt="">
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="user-detail">
+                <h3>{{data.name|capitalize}}</h3>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                        value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Active
+                    </label>
+                </div>
+                <button class="btn btn-dark">Edit</button> <button class="btn btn-dark">Change
+                    Password</button>
+
+                <div class="tabset">
+                    <!-- Tab 1 -->
+                    <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+                    <label for="tab1"> <i class="fa fa-users"></i> About Us</label>
+                    <!-- Tab 2 -->
+                    <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+                    <label for="tab2"> <i class="fa fa-location-dot"></i> Address</label>
+                    <!-- Tab 3 -->
+                    <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+                    <label for="tab3"> <i class="fa fa-id-card"></i> Documents</label>
+
+                    <div class="tab-panels">
+                        <section id="marzen" class="tab-panel">
+                            <h5>CONTACT INFORMATION</h5>
+
+                            <hr>
+                            <hr>
+
+                            <div class="usere-data">
+                                <div class="left">Phone</div>
+                                <div class="right"> {{data.phone}}</div>
+
+                            </div>
+                            <hr>
+                            <div class="usere-data">
+                                <div class="left">Address</div>
+                                <div class="right"> -----</div>
+
+                            </div>
+                            <hr>
+
+                            <div class="usere-data">
+                                <div class="left">Email</div>
+                                <div class="right"> {{data.email}}</div>
+
+                            </div>
+                            <hr>
+
+                            <div class="usere-data">
+                                <div class="left">Gender </div>
+                                <div class="right"> Male</div>
+
+                            </div>
+                            <hr>
+
+                            <div class="usere-data">
+                                <div class="left">DOB </div>
+                                <div class="right"> 16 sep 2001</div>
+
+                            </div>
+                            <!-- <hr>
+                            <br><br>
+                            <h5>BASIC INFORMATION
+                            </h5>
+                            <hr>
+                            <hr>
+
+
+                            <div class="usere-data">
+                                <div class="left">Created On: </div>
+                                <div class="right"> 6/21/22, 1:37 PM</div>
+
+                            </div>
+                            <hr> -->
+
+                        </section>
+                        <section id="rauchbier" class="tab-panel">
+                            <h5>Add Address</h5>
+                            <div class="form-group">
+                                <input type="street" class="form-control" id="autocomplete"
+                                    placeholder="Street">
+
+                                <input type="city" class="form-control" id="inputCity" placeholder="City">
+
+                                <input type="state" class="form-control" id="inputState" placeholder="State">
+
+                                <input type="zip" class="form-control" id="inputZip" placeholder="Zip">
+
+                                <input type="county" class="form-control" id="inputCounty" placeholder="County">
+
+                                <a class="btn btn-outline-danger  text-white" id="inputCountry"> Add Address </a>
+                            </div>
+
+                        </section>
+                        <section id="dunkles" class="tab-panel">
+                            <h2>UPDATE DOCUMENTS</h2>
+                            <form>
+
+                                <div class="row">
+                                    <label for="exampleInputEmail1">CNIC</label>
+                                    <input type="CNIC" class="form-control" id="CNIC" aria-describedby="CNIC"
+                                        placeholder="Enter CNIC Number">
+
+                                    <div class="col">
+                                        <label for="formGroupExampleInput">CNIC Front Image *</label>
+                                        <input type="file" class="form-control" placeholder="First name">
+                                    </div>
+                                    <div class="col">
+                                        <label for="formGroupExampleInput">CNIC Back Image *</label>
+                                        <input type="file" class="form-control" placeholder="Last name">
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="row">
+                                    <label for="exampleInputEmail1">LICENSE </label>
+                                    <input type="text" class="form-control" id="LICENSE"
+                                        placeholder="Enter LICENSE Number ">
+
+
+                                    <div class="col">
+                                        <label for="formGroupExampleInput">LICENSE Front Image *</label>
+                                        <input type="file" class="form-control" placeholder="First name">
+                                    </div>
+                                    <div class="col">
+                                        <label for="formGroupExampleInput">LICENSE Back Image *</label>
+                                        <input type="file" class="form-control" placeholder="Last name">
+                                    </div>
+                                </div>
+                                <a href="" class="btn btn-outline-danger "> Submit </a>
+                            </form>
+                        </section>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+        
+{% endblock %}
+
+
+
