@@ -1,0 +1,74 @@
+
+{% extends 'admin-layout.html' %} 
+{% block title %}All Subscribers{% endblock %}
+{% block head %}
+{{ super() }}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="page-header">
+    <h3 class="page-title">
+      <span class="page-title-icon bg-gradient-primary text-white me-2">
+        <i class="mdi mdi-car"></i>
+      </span> All Subscribers
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        <!-- <li class="breadcrumb-item active" aria-current="page">
+          <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+        </li> -->
+      </ul>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body table-responsive">
+            <!-- <h4 class="card-title">Hoverable Table</h4>
+            <p class="card-description"> Add class <code>.table-hover</code> -->
+            </p>
+            <table class="table table-hover  ">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Email</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in List %}
+                <tr>
+                  <td>{{i._id}}</td>
+                  <td>{{i.email}}</td>
+                  <td><a href="delete-subscriber/{{i._id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <a href="/admin"><button type="button" class="btn btn-gradient-secondary btn-icon-text">
+            <i class="mdi mdi-upload btn-icon-prepend"></i> Back </button></a>
+      </div>
+  </div>
+</div>
+
+        
+{% endblock %}
+
+{% block scripts %}
+{% if deleted %}
+<script>
+  Swal.fire(
+  'Success!',
+  '{{deleted}}',
+  'Success'
+)
+</script>
+{% endif %}
+
+{% endblock %}
+

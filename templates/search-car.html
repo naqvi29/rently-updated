@@ -99,13 +99,13 @@
                         </span>
                     </label>
                     <label class="radio_wrap" data-radio="radio_2">
-                        {% if day_type == "short_rental" %}
-                        <input type="radio" name="sports" class="input" checked onclick="handle_short_click(this);" value="short_rental">
+                        {% if day_type == "with_driver" %}
+                        <input type="radio" name="sports" class="input" checked onclick="handle_with_driver(this);" value="with_driver">
                         {% else %}
-                        <input type="radio" name="sports" class="input" onclick="handle_short_click(this);" value="short_rental">
+                        <input type="radio" name="sports" class="input" onclick="handle_with_driver(this);" value="with_driver">
                         {% endif %}
                         <span class="radio_mark" style="color: white;">
-                            SHORT RENTAL
+                            WITH DRIVER
                         </span>
                     </label>
                     <label class="radio_wrap" data-radio="radio_3">
@@ -153,16 +153,16 @@
                                     <h2 class="hg">{{i.name}}</h2>
                                 </div>
                                 <div id="hour-div-{{i._id}}" data-price-per-hour="{{i.price_per_hour}}" data-price-per-hour-old="{{i.price_per_hour_old}}" data-price-per-day="{{i.price_per_day}}" data-price-per-day-old="{{i.price_per_day_old}}" class="col-sm-6">
-                                    {% if day_type=="short_rental" %}
+                                    <!-- {% if day_type=="short_rental" %}
                                     <span  class="cut pg" id="oldprice-{{i._id}}">{{i.price_per_hour_old}}</span>
                                     <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_hour}}</span> PKR/Hour</h3>
-                                    {% else %}
+                                    {% else %} -->
                                     <span  class="cut pg" id="oldprice-{{i._id}}">{{i.price_per_day_old}} </span>
                                     <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_day}}</span> PKR/day</h3>
                                     <span hidden  id="oldpricehide-{{i._id}}">{{i.price_per_day_old}} </span>
                                     <span hidden id="pricehide-{{i._id}}">{{i.price_per_day}}</span>
 
-                                    {% endif %}
+                                    <!-- {% endif %} -->
                                     {% if i.out_city_cost %}
                                     <span hidden class="pg" id="out-city-cost-{{i._id}}">{{i.out_city_cost}}</span>
                                     {% endif %}
@@ -172,6 +172,27 @@
                                         See all details
                                     </a>
                                 </div>
+                                {% if i.city == "out" %}
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
+
+                                        
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
+                                    </div>
+                                    <p style="font-size: 0.7rem!important; color: #6a6866 !important;" id="outcity_text"></p>
+                                </div>
+                                {% elif i.city == "in" %}
+                                <div class="col-sm-6 smt">
+                                    <h6>In City Only</h6>
+                                </div>
+                                {% endif %}
 
                                 {% if day_type=="self_drive" %}
                                 <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> Self Drive</span>
@@ -193,26 +214,6 @@
                                 </span> -->
                                 <span class="smt"> <i class="fa fa-hourglass"></i> Full Day ({{i.full_day}}hrs) </span>
                                 <br>
-                                {% if i.city == "out" %}
-                                <div class="col-sm-6 smt">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
-                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
-                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
-
-                                        
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
-                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');">
-                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
-                                    </div>
-                                </div>
-                                {% elif i.city == "in" %}
-                                <div class="col-sm-6 smt">
-                                    <h6>In City Only</h6>
-                                </div>
-                                {% endif %}
 
                                 <div id="days-div-{{i._id}}">
                                     {% if day_type=="self_drive" %}
@@ -291,14 +292,14 @@
                                     {% endif %}  
                                 </div>
                                 <div id="hour-div-{{i._id}}" data-price-per-hour="{{i.price_per_hour}}" data-price-per-hour-old="{{i.price_per_hour_old}}" data-price-per-day="{{i.price_per_day}}" data-price-per-day-old="{{i.price_per_day_old}}" class="col-sm-6">
-                                    {% if day_type=="short_rental" %}
+                                    <!-- {% if day_type=="short_rental" %}
                                     <span id="oldprice-{{i._id}}" class="cut pg">{{i.price_per_hour_old}} </span>
                                     <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_hour}}</span> PKR/Hour</h3>
-                                    {% else %}
+                                    {% else %} -->
                                     <span id="oldprice-{{i._id}}" class="cut pg">{{i.price_per_day_old}} </span>
                                     <h3  class="pg"><span id="price-{{i._id}}">{{i.price_per_day}}</span> PKR/day</h3>
 
-                                    {% endif %}
+                                    <!-- {% endif %} -->
                                     {% if i.out_city_cost %}
                                     <span hidden class="pg" id="out-city-cost-{{i._id}}">{{i.out_city_cost}}</span>
                                     {% endif %}
@@ -308,6 +309,27 @@
                                         See all details
                                     </a>
                                 </div>
+                                {% if i.city == "out" %}
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
+                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
+
+                                        
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
+                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');" >
+                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
+                                    </div>
+                                    <p style="font-size: 0.7rem!important; color: #6a6866 !important;" id="outcity_text" ></p>
+                                </div>
+                                {% elif i.city == "in" %}
+                                <div class="col-sm-6 smt">
+                                    <h6>In City Only</h6>
+                                </div>
+                                {% endif %}
 
                                 {% if day_type=="self_drive" %}
                                 <span class="smt" id="sx-{{i._id}}"> <i class="fa fa-user"></i> Self Drive</span>
@@ -329,26 +351,6 @@
                                 </span> -->
                                 <span class="smt"> <i class="fa fa-hourglass"></i> Full Day ({{i.full_day}}hrs) </span>
                                 <br>
-                                {% if i.city == "out" %}
-                                <div class="col-sm-6 smt">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="{{i._id}}-radio1" name="{{i._id}}-radio"
-                                            class="custom-control-input" value="in" checked onchange="change_city('{{i._id}}');">
-                                        <label class="custom-control-label" for="{{i._id}}-radio1">In City</label>
-
-                                        
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="{{i._id}}-radio2" name="{{i._id}}-radio"
-                                            class="custom-control-input" value="out" onchange="change_city('{{i._id}}');" >
-                                        <label class="custom-control-label" for="{{i._id}}-radio2">Out City</label>
-                                    </div>
-                                </div>
-                                {% elif i.city == "in" %}
-                                <div class="col-sm-6 smt">
-                                    <h6>In City Only</h6>
-                                </div>
-                                {% endif %}
                                 <br>
                                 <button onclick="booknow('{{i._id}}')" class="btn btn-dark btn-book">Book Now</button>
 
@@ -603,16 +605,16 @@
     //     }
     // }
 
-    function handle_short_click(){
+    function handle_with_driver(){
 
         pickup_location = document.getElementById("pickup_location").value;
         date = document.getElementById("date").value;
         time = document.getElementById("time").value;
         category = '{{category}}';
         if (category){
-            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=short_rental&category="+category);
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=with_driver&category="+category);
         }else{
-            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=short_rental");
+            location.replace("/search-car?pickup_location="+pickup_location+"&date="+date+"&time="+time+"&type=with_driver");
         }
     }
 
@@ -668,6 +670,7 @@
             dv_new = dv_new+out_city_cost;
             dv_old_div.innerHTML = dv_old;
             dv_new_div.innerHTML = dv_new;
+            document.getElementById("outcity_text").innerHTML=`depending on the destination number of days and other conditions, our out city rates are liable to change `;
         }else{
             dv_old_div = document.getElementById("oldprice-"+vehicle_id)
             dv_new_div = document.getElementById("price-"+vehicle_id)
@@ -677,6 +680,7 @@
             dv_new = dv_new-out_city_cost;
             dv_old_div.innerHTML = dv_old;
             dv_new_div.innerHTML = dv_new;
+            document.getElementById("outcity_text").innerHTML=``;
         }  
     }
 
@@ -690,8 +694,12 @@
             dv_new_div = document.getElementById("pricehide-"+vehicle_id)
             dv_old = parseFloat(dv_old_div.innerHTML);
             dv_new = parseFloat(dv_new_div.innerHTML);
-            dv_old = dv_old*14;
-            dv_new = dv_new*14;
+            fifteenPercent_new = dv_old/100*10
+            fifteenPercent_old = dv_old/100*10
+            dv_old = dv_old-fifteenPercent_old;
+            dv_new = dv_new-fifteenPercent_new;
+            // dv_old = dv_old*14;
+            // dv_new = dv_new*14;
             document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
             document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
         }else if(days_radio=="24"){
@@ -699,8 +707,10 @@
             dv_new_div = document.getElementById("pricehide-"+vehicle_id)
             dv_old = parseFloat(dv_old_div.innerHTML);
             dv_new = parseFloat(dv_new_div.innerHTML);
-            dv_old = dv_old*24;
-            dv_new = dv_new*24;
+            fifteenPercent_old = dv_old/100*15
+            fifteenPercent_new = dv_old/100*15
+            dv_old = dv_old-fifteenPercent_old;
+            dv_new = dv_new-fifteenPercent_new;
             document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
             document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
         } else if(days_radio=="30"){
@@ -708,8 +718,10 @@
             dv_new_div = document.getElementById("pricehide-"+vehicle_id)
             dv_old = parseFloat(dv_old_div.innerHTML);
             dv_new = parseFloat(dv_new_div.innerHTML);
-            dv_old = dv_old*30;
-            dv_new = dv_new*30;
+            fifteenPercent_old = dv_old/100*30
+            fifteenPercent_new = dv_old/100*30
+            dv_old = dv_old-fifteenPercent_old;
+            dv_new = dv_new-fifteenPercent_new;
             document.getElementById("oldprice-"+vehicle_id).innerHTML = dv_old;
             document.getElementById("price-"+vehicle_id).innerHTML = dv_new;
 

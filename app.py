@@ -268,6 +268,9 @@ def corporate_enquiries():
         msg = Message("DriveNow | Inquiry Received",sender='nasiralisw2@gmail.com', recipients=[email])
         msg.html = "<p>Dear "+name+"</p><p style='margin-top:1%'>Thank you for your inquiry. we will respond to you soon</p><p style='margin-top:1%'>Thank you</p><p style='margin-top:1%'>DriveNow</p>"
         mail.send(msg)
+        msg = Message("DriveNow | New Inquiry Received",sender='nasiralisw2@gmail.com', recipients=['nasiralisw2@gmail.com'])
+        msg.html = "<p>Name: "+name+"</p><p style='margin-top:1%'>Email: "+email+"</p><p style='margin-top:1%'>Number: "+number+"</p><p style='margin-top:1%'>Address: "+address+"</p><p style='margin-top:1%'>location: "+location+"</p><p style='margin-top:1%'>No of Cars: "+cars+"</p><p style='margin-top:1%'>No of Days: "+days+"</p><p style='margin-top:1%'>Purpose Of Enquiry: "+purpose+"</p><p style='margin-top:1%'>Details: "+details+"</p>"
+        mail.send(msg)
         if 'loggedin' in session:
             return render_template("corporate-enquiries.html",loggedin = True,username=session['name'],type=session['type'],userid=session['userid'])
         else:
@@ -452,6 +455,21 @@ def view_all_messages():
                 i.update({"_id":str(i["_id"])})
                 List.append(i)
             return render_template("messages.html",List=List,username=session['name'])
+        else:
+            return render_template("admin-login.html",error="Please Logout From User Account First!")
+    else:
+        return render_template("admin-login.html")
+
+@app.route("/view-all-subscribers")
+def view_all_subscribers():
+    if 'loggedin' in session:
+        if session['type'] == 'admin':
+            data = db.subscribers.find()
+            List = []
+            for i in data:
+                i.update({"_id":str(i["_id"])})
+                List.append(i)
+            return render_template("subscribers.html",List=List,username=session['name'])
         else:
             return render_template("admin-login.html",error="Please Logout From User Account First!")
     else:
@@ -684,6 +702,45 @@ def delete_message(id):
             return render_template("admin-login.html",error="Please Logout From User Account First!")
     else:
         return render_template("admin-login.html")
+
+@app.route("/delete-subscriber/<string:id>",methods=['GET'])
+def delete_subscriber(id):
+    if 'loggedin' in session:
+        if session['type'] == 'admin':
+            query = {"_id":ObjectId(id)}
+            exist = db.subscribers.find_one(query)
+            if not exist:
+                return str("Invalid subscriber Id.. Or subscribers does not exist anymore")
+            db.subscribers.delete_one(query)
+            return redirect(url_for('view_all_subscribers'))
+        else:
+            return render_template("admin-login.html",error="Please Logout From User Account First!")
+    else:
+        return render_template("admin-login.html")
+@app.route("/subscribe")
+def subscribe():
+    # try:
+    if "email" in request.args:
+        email = request.args.get("email")
+    else:
+        email = None
+    if email:
+        exist = db.subscribers.find({"email":email})
+        if not exist:
+            db.subscribers.insert_one({"email":email})
+
+        msg = Message("DriveNow",sender='nasiralisw2@gmail.com', recipients=[email])
+        msg.html = "<p>Thanks for subscribing</p>"
+        c
+        msg = Message("DriveNow | New Subscriber",sender='nasiralisw2@gmail.com', recipients=['nasiralisw2@gmail.com'])
+        msg.html = "<p>Email: "+email+"</p>"
+        mail.send(msg)
+
+        return redirect(url_for("index"))
+    else:
+        return redirect(url_for("index"))
+    # except Exception as e:
+    #     return str(e)
 
 
 

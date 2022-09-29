@@ -20,9 +20,32 @@
     <link rel="stylesheet" href="/static/css/book-now.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- whatsapp popup -->
-    <script src="https://apps.elfsight.com/p/platform.js" defer></script>
-    <div class="elfsight-app-8d497432-d86b-4240-aaf3-7a5329e3d59b"></div>
+    <!-- <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+    <div class="elfsight-app-8d497432-d86b-4240-aaf3-7a5329e3d59b"></div> -->
+    <a href="https://api.whatsapp.com/send?phone=+923332161419&text=Hey," class="float" target="_blank">
+        <i class="fab fa-whatsapp my-float"></i>
+    </a>
     <!-- whatsapp end  -->
+    <style type="text/css">
+        .float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:40px;
+    right:40px;
+    background-color:#25d366;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+  font-size:30px;
+    box-shadow: 2px 2px 3px #999;
+  z-index:100;
+}
+
+.my-float{
+    margin-top:16px;
+}
+    </style>
 </head>
 
 <body>
@@ -217,9 +240,9 @@
                                 <p>Don’t miss to subscribe to our new feeds, kindly fill the form below.</p>
                             </div>
                             <div class="subscribe-form">
-                                <form action="#">
+                                <form action="/subscribe">
                                     <input type="text" id="email" name="email" placeholder="Email Address">
-                                    <button><i class="fab fa-telegram"></i></button>
+                                    <button><i class="fas fa-bell"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -276,6 +299,8 @@
         )
         }
       </script>
+
+
  
 
 </body>

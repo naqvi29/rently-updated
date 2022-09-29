@@ -21,44 +21,44 @@
                     <form action="/corporate-enquiries" method="post">
                         <div class="form-row">
                             <div class="col">
-                                <input required type="text" id="Name" name="name" class="form-control" placeholder=" Name">
+                                <input required type="text" id="Name" name="name" class="form-control" placeholder=" Name" required>
                             </div>
                             <div class="col ">
-                                <input required type="Email" name="email" id="Email" class="form-control" placeholder=" Email">
+                                <input required type="email" name="email" id="Email" class="form-control" placeholder=" Email" required>
                             </div>
                         </div>
                     <!-- </form>
                     <form> -->
                         <div class="form-row">
                             <div class="col mt-1">
-                                <input required type="number" id="number" name="number"   class="form-control" placeholder="Phone">
+                                <input required type="number" id="number" name="number"   class="form-control" placeholder="Phone" required>
                             </div>
                             <div class="col mt-1">
-                                <input required type="text" name="address" id="Address" class="form-control" placeholder="Address">
+                                <input required type="text" name="address" id="Address" class="form-control" placeholder="Address" required> 
                             </div>
                         </div>
                     <!-- </form>
                     <form> -->
                         <div class=" mt-1">
                             <input type="text" id="Location" name="location" class="form-control"
-                                aria-describedby="emailHelp" placeholder="Enter Your Location">
+                                aria-describedby="emailHelp" placeholder="Enter Your Location" required>
                         </div>
 
                         <!-- <form> -->
                             <div class="form-row">
                                 <div class="col mt-1 ">
-                                    <input required type="text" name="cars" id="Cars" class="form-control" placeholder="No of Cars ">
+                                    <input required type="text" name="cars" id="Cars" class="form-control" placeholder="No of Cars " required>
                                 </div>
                                 <div class="col mt-1">
-                                    <input required type="text" name="days" id="Days" class="form-control" placeholder="No of Days ">
+                                    <input required type="text" name="days" id="Days" class="form-control" placeholder="No of Days " required>
                                 </div>
                             </div>
                         <!-- </form> -->
                         <div class=" mt-1">
                             <input required type="text" name="purpose" id="enquire" class="form-control" 
-                                aria-describedby="emailHelp" placeholder="purpos of enquire">
+                                aria-describedby="emailHelp" placeholder="purpos of enquiry" required>
                         </div>
-                        <textarea class="form-control mt-1" id="exampleFormControlTextarea1" placeholder="Details" name="details" rows="3"></textarea>
+                        <textarea required class="form-control mt-1" id="exampleFormControlTextarea1" placeholder="Details" name="details" rows="3"></textarea>
                         <button type="submit" class="btn btn-book btn-dark m-3">Submit</button>
                     </form>
                 </div>
